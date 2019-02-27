@@ -19,7 +19,7 @@ public class ReaderTest {
     @Test
     public void testReader () {
         try {
-            reader.read("test/resources/hello.cpp");
+            reader.read("test/resources/polymorphic_pointers.cpp");
         }catch (IOException e) {
             System.out.println(e.toString());
             Assert.fail();
