@@ -21,6 +21,13 @@ public class Tools {
     }
 
     //Methods
+    public void printEverything (ParseTree parseTree) {
+        System.out.println(parseTree.getClass() + " -> " + parseTree.getText());
+        for (int i = 0; i < parseTree.getChildCount(); i++) {
+            printEverything(parseTree.getChild(i));
+        }
+    }
+
     public void printTerminalNodes (ParseTree parseTree) {
         if (parseTree instanceof TerminalNode) {
             System.out.println(parseTree.getText());
