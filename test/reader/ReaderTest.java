@@ -14,6 +14,6 @@ public class ReaderTest {
     //Methods
     @Test
     public void testRead () {
-        reader.read("test/resources/polymorphic_pointers.cpp");
+        reader.read("test/data/polymorphic_pointers.cpp");
     }
 }
