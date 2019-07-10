@@ -5,12 +5,14 @@ import org.junit.Test;
 
 public class ReaderTest {
     //Attributes
-    Reader reader;
+    private Reader reader;
+
     //Constructor
     @Before
     public void init () {
         reader = new Reader();
     }
+
     //Methods
     @Test
     public void testRead () {
