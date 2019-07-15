@@ -7,7 +7,7 @@ public class StructureTest {
     //Attributes
     private Instruction state;
     private Instruction level;
-    private Instruction transition;
+    private Transition transition;
 
     //Constructor
     @Before
