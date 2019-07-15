@@ -5,22 +5,32 @@ import org.junit.Test;
 
 public class StructureTest {
     //Attributes
-    private Instruction state;
-    private Instruction level;
-    private Transition transition;
 
     //Constructor
     @Before
     public void init () {
-        state = new State();
-        level = new Level();
-        transition = new Transition();
+
     }
 
     //Methods
     @Test
     public void test () {
+        Instruction origin = new Level();
+        Instruction destiny = new State();
+        Transition transition = new Transition();
 
+        Event firstEvent = new Event();
+        firstEvent.setEvent("Boom!");
+
+        transition.setEvent(firstEvent);
+        transition.setFrom(origin);
+        transition.setTo(destiny);
+
+        System.out.println("- - - - - - - - - - - - - - - - - - - - -");
+        System.out.println("Transition origin: " + transition.getFrom());
+        System.out.println("Transition destiny: " + transition.getTo());
+        System.out.println("Transition event: " + transition.getEvent().getEvent());
+        System.out.println("- - - - - - - - - - - - - - - - - - - - -");
     }
 
 }
