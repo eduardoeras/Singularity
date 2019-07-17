@@ -3,7 +3,16 @@ package reader;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-public class Tools {
+import reader.CPP14Parser.ClassheadContext;
+import reader.CPP14Parser.ClassnameContext;
+import reader.CPP14Parser.ClasskeyContext;
+import reader.CPP14Parser.ClassordecltypeContext;
+import reader.CPP14Parser.ClassheadnameContext;
+import reader.CPP14Parser.ClassspecifierContext;
+import reader.CPP14Parser.ClassvirtspecifierContext;
+
+
+public class ParseTreePrinter {
     //Attributes
     private int level;
     private int classLevel;
@@ -12,7 +21,7 @@ public class Tools {
     private boolean newLine;
 
     //Constructor
-    public Tools () {
+    public ParseTreePrinter() {
         level = 0;
         classLevel = -1;
         visibility = false;
@@ -22,9 +31,43 @@ public class Tools {
 
     //Methods
     public void printEverything (ParseTree parseTree) {
+        for (int i = 0; i < level; i++) {
+            System.out.print("    ");
+        }
         System.out.println(parseTree.getClass() + " -> " + parseTree.getText());
         for (int i = 0; i < parseTree.getChildCount(); i++) {
+            if (i == 0) {
+                level ++;
+            }
             printEverything(parseTree.getChild(i));
+        }
+        level --;
+    }
+
+    public void printClassData (ParseTree parseTree) {
+        if (parseTree instanceof ClassheadContext) {
+            System.out.println("ClassheadContext: " + parseTree.getText());
+        }
+        if (parseTree instanceof ClassnameContext) {
+            System.out.println("ClassnameContext: " + parseTree.getText());
+        }
+        if (parseTree instanceof ClasskeyContext) {
+            System.out.println("ClasskeyContext: " + parseTree.getText());
+        }
+        if (parseTree instanceof ClassordecltypeContext) {
+            System.out.println("ClassordecltypeContext: " + parseTree.getText());
+        }
+        if (parseTree instanceof ClassheadnameContext) {
+            System.out.println("ClassheadnameContext: " + parseTree.getText());
+        }
+        if (parseTree instanceof ClassspecifierContext) {
+            System.out.println("ClassspecifierContext: " + parseTree.getText());
+        }
+        if (parseTree instanceof ClassvirtspecifierContext) {
+            System.out.println("ClassvirtspecifierContext: " + parseTree.getText());
+        }
+        for (int i = 0; i < parseTree.getChildCount(); i++) {
+            printClassData(parseTree.getChild(i));
         }
     }
 

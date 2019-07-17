@@ -2,8 +2,7 @@ package global.tools;
 
 public class IdGenerator {
     //Attributes
-    private static IdGenerator uniqueInstance;
-    private int integerId;
+    private static int integerId;
 
     //Constructor
     private IdGenerator () {
@@ -11,19 +10,12 @@ public class IdGenerator {
     }
 
     //Static Methods
-    public static IdGenerator getInstance () {
-        if (uniqueInstance == null) {
-            uniqueInstance = new IdGenerator();
-        }
-        return uniqueInstance;
+    public static void reset () {
+        integerId = 0;
     }
 
-    //Public Methods
-    public int getIntegerId () {
+    public static int getIntegerId () {
         return ++ integerId;
     }
 
-    public void reset () {
-        integerId = 0;
-    }
 }

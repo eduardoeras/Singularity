@@ -10,7 +10,6 @@ public class Event {
     }
 
     //Methods
-
     public void setEvent (String event) {
         this.event = event;
     }

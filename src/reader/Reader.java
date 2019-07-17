@@ -1,56 +1,27 @@
 package reader;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+
+import java.io.IOException;
 
 public class Reader {
+
     //Attributes
-    InputStream inputStream;
-    InputStreamReader inputStreamReader;
-    BufferedReader bufferedReader;
 
     //Constructor
 
-    //Methods
-    public void read (String input) {
-        try {
-            inputStream = new FileInputStream(input);
-            inputStreamReader = new InputStreamReader(inputStream);
-            bufferedReader = new BufferedReader(inputStreamReader);
+    //Public Methods
+    public ParseTree read (String fileName) throws IOException {
+        CharStream charStream = CharStreams.fromFileName(fileName);
+        CPP14Lexer cpp14Lexer = new CPP14Lexer(charStream);
+        CommonTokenStream commonTokenStream = new CommonTokenStream(cpp14Lexer);
+        CPP14Parser cpp14Parser = new CPP14Parser(commonTokenStream);
 
-            int element = 0;
-            while (element != -1) {
-                element = bufferedReader.read();
-                char character = (char) element;
-                System.out.print(character);
-            }
-
-        } catch (Exception e){
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            if (inputStreamReader != null) {
-                try {
-                    inputStreamReader.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        ParseTree parseTree = cpp14Parser.translationunit();
+        return parseTree;
     }
+
 }
