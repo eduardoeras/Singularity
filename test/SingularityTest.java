@@ -19,7 +19,7 @@ public class SingularityTest {
         singularity.run("test/data/triangle.cpp");
     }
 
-    @Test
+    //@Test
     public void exceptionTest () {
         singularity.run("none");
     }
