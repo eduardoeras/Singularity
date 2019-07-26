@@ -1,6 +1,7 @@
 package extractor;
 
 import extractor.state.StateWalker;
+import extractor.tools.Matrix;
 import extractor.transition.TransitionWalker;
 import global.structure.Instruction;
 import global.structure.Transition;
@@ -11,20 +12,37 @@ import java.util.List;
 
 public class Extractor {
     //Attributes
+    private Matrix matrix;
     private StateWalker stateWalker;
     private TransitionWalker transitionWalker;
     //Constructor
     public Extractor () {
+        matrix = new Matrix();
         stateWalker = new StateWalker();
         transitionWalker = new TransitionWalker();
     }
 
-    //Methods
+    //Public Methods
     public void extract (ParseTree parseTree) {
         List<Instruction> states = new ArrayList<>();
-        stateWalker.walk(parseTree, states);
         List<Transition> transitions = new ArrayList<>();
-        transitionWalker.walk(parseTree, transitions);
+        List<List<ParseTree>> cppMatrix = new ArrayList<>();
+        List<ParseTree> line = new ArrayList<>();
+        cppMatrix.add(line);
+
+        matrix.matrixGenerator(cppMatrix, parseTree);
+        stateWalker.walk(cppMatrix, states);
+        transitionWalker.walk(cppMatrix, transitions);
     }
+
+    //PrivateMethods
+    /*private void printMatrix (List<List<ParseTree>> cppMatrix) {
+        for (List<ParseTree> line : cppMatrix) {
+            for (ParseTree element : line) {
+                System.out.print (element.getText() + " ");
+            }
+            System.out.println();
+        }
+    }*/
 
 }

@@ -11,7 +11,7 @@ public class TransitionWalker {
     //Constructor
 
     //Methods
-    public void walk (ParseTree parseTree, List<Transition> states) {
+    public void walk (List<List<ParseTree>> cppMatrix, List<Transition> states) {
         System.out.println("Transition walker...");
     }
 }

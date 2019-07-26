@@ -1,3 +1,4 @@
+import global.tools.Reset;
 import reader.Reader;
 import constructor.Constructor;
 import extractor.Extractor;
@@ -11,6 +12,7 @@ public class Singularity {
     private Extractor extractor;
     private Constructor constructor;
     private Generator generator;
+    private Reset reset;
 
     //Constructor
     public Singularity () {
@@ -18,6 +20,7 @@ public class Singularity {
         extractor = new Extractor();
         constructor = new Constructor();
         generator = new Generator();
+        reset = new Reset();
     }
 
     //Methods
@@ -28,6 +31,7 @@ public class Singularity {
             System.out.println("ERROR: Input file not found.");
             exception.printStackTrace();
         }
+        reset.masterReset();
     }
 
 }
