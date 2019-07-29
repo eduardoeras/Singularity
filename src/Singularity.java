@@ -1,10 +1,9 @@
+import global.exception.ReaderException;
 import global.tools.Reset;
 import reader.Reader;
 import constructor.Constructor;
 import extractor.Extractor;
 import generator.Generator;
-
-import java.io.IOException;
 
 public class Singularity {
     //Attributes
@@ -27,8 +26,7 @@ public class Singularity {
     public void run (String input) {
         try {
             extractor.extract(reader.read(input));
-        }catch (IOException exception) {
-            System.out.println("ERROR: Input file not found.");
+        }catch (ReaderException exception) {
             exception.printStackTrace();
         }
         reset.masterReset();

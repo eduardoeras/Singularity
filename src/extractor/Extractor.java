@@ -15,6 +15,7 @@ public class Extractor {
     private Matrix matrix;
     private StateWalker stateWalker;
     private TransitionWalker transitionWalker;
+
     //Constructor
     public Extractor () {
         matrix = new Matrix();
@@ -28,6 +29,7 @@ public class Extractor {
         List<Transition> transitions = new ArrayList<>();
         List<List<ParseTree>> cppMatrix = new ArrayList<>();
         List<ParseTree> line = new ArrayList<>();
+
         cppMatrix.add(line);
 
         matrix.matrixGenerator(cppMatrix, parseTree);
