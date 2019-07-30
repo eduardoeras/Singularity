@@ -1,7 +1,7 @@
 package extractor.transition;
 
 import global.structure.Transition;
-import org.antlr.v4.runtime.tree.ParseTree;
+import global.structure.Line;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public class TransitionWalker {
     //Constructor
 
     //Methods
-    public void walk (List<List<ParseTree>> cppMatrix, List<Transition> states) {
+    public void walk (List<Line> cppMatrix, List<Transition> states) {
         System.out.println("Transition walker...");
     }
 }

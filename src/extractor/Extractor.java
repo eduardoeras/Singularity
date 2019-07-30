@@ -1,5 +1,6 @@
 package extractor;
 
+import global.structure.Line;
 import extractor.state.StateWalker;
 import extractor.tools.Matrix;
 import extractor.transition.TransitionWalker;
@@ -27,24 +28,12 @@ public class Extractor {
     public void extract (ParseTree parseTree) {
         List<Instruction> states = new ArrayList<>();
         List<Transition> transitions = new ArrayList<>();
-        List<List<ParseTree>> cppMatrix = new ArrayList<>();
-        List<ParseTree> line = new ArrayList<>();
-
-        cppMatrix.add(line);
+        List<Line> cppMatrix = new ArrayList<>();
+        cppMatrix.add(new Line());
 
         matrix.matrixGenerator(cppMatrix, parseTree);
         stateWalker.walk(cppMatrix, states);
         transitionWalker.walk(cppMatrix, transitions);
     }
-
-    //PrivateMethods
-    /*private void printMatrix (List<List<ParseTree>> cppMatrix) {
-        for (List<ParseTree> line : cppMatrix) {
-            for (ParseTree element : line) {
-                System.out.print (element.getText() + " ");
-            }
-            System.out.println();
-        }
-    }*/
 
 }

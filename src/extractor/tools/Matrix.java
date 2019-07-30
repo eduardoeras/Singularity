@@ -1,8 +1,9 @@
 package extractor.tools;
 
+import global.structure.Line;
+
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Matrix {
@@ -11,29 +12,32 @@ public class Matrix {
     //Constructor
 
     //Methods
-    public void matrixGenerator (List<List<ParseTree>> cppMatrix, ParseTree parseTree) {
+    public void matrixGenerator (List<Line> cppMatrix, ParseTree parseTree) {
         if (parseTree instanceof org.antlr.v4.runtime.tree.TerminalNodeImpl) {
-            if (parseTree.getText().equals("{") || parseTree.getText().equals("}")) {
-                if (!cppMatrix.get(cppMatrix.size() - 1).isEmpty()) {
-                    newLine(cppMatrix);
-                }
-                cppMatrix.get(cppMatrix.size() - 1).add(parseTree);
-                newLine(cppMatrix);
-            }else if (!parseTree.getText().equals(";") && !parseTree.getText().equals(":")) {
-                cppMatrix.get(cppMatrix.size() - 1).add(parseTree);
-            } else {
-                newLine(cppMatrix);
+            switch (parseTree.getText()) {
+                case "{" :
+                    cppMatrix.get(cppMatrix.size() - 1).setEndLineCharacter("{");
+                    cppMatrix.add(new Line());
+                    break;
+                case ";" :
+                    cppMatrix.get(cppMatrix.size() - 1).setEndLineCharacter(";");
+                    cppMatrix.add(new Line());
+                    break;
+                case ":" :
+                    cppMatrix.get(cppMatrix.size() - 1).setEndLineCharacter(":");
+                    cppMatrix.add(new Line());
+                    break;
+                case "}" :
+                    cppMatrix.get(cppMatrix.size() - 1).setEndLineCharacter("}");
+                    cppMatrix.add(new Line());
+                    break;
+                default:
+                    cppMatrix.get(cppMatrix.size() - 1).getContent().add(parseTree);
             }
         }
         for (int i = 0; i < parseTree.getChildCount(); i++) {
             matrixGenerator(cppMatrix, parseTree.getChild(i));
         }
-    }
-
-    //Private Methods
-    private void newLine (List<List<ParseTree>> cppMatrix) {
-        List<ParseTree> line = new ArrayList<>();
-        cppMatrix.add(line);
     }
 
 }
