@@ -1,19 +1,22 @@
 package extractor.state;
 
-import global.structure.Line;
-import global.structure.Instruction;
+import global.structure.*;
+import global.tools.IdGenerator;
 import global.tools.StringTools;
-import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.List;
 
 public class StateWalker {
     //Attributes
+    private LabelExtractor labelExtractor;
+    private TypeExtractor typeExtractor;
     private int scopeLevel;
     private StringTools stringTools;
 
     //Constructor
     public StateWalker () {
+        labelExtractor = new LabelExtractor();
+        typeExtractor = new TypeExtractor();
         scopeLevel = 0;
         stringTools = new StringTools();
     }
@@ -29,40 +32,42 @@ public class StateWalker {
     private void classify (Line line, List<Instruction> states) {
         switch (line.getEndLineCharacter()) {
             case "{" :
-                printLineContents(line);
-                System.out.println();
-                indent();
-                System.out.print("{\n");
+                Level newLevel = new Level();
+                newLevel.setLabel(labelExtractor.getLevelLabel(line));
+                newLevel.setType(typeExtractor.getLevelType(line));
+                newLevel.setLine(line);
+                newLevel.setScopeLevel(scopeLevel);
+                states.add(newLevel);
                 scopeLevel++;
                 break;
             case "}" :
                 scopeLevel--;
-                indent();
-                System.out.print("}\n");
+                Level endLevel = new Level();
+                endLevel.setLabel(labelExtractor.getLevelLabel(line));
+                endLevel.setType(typeExtractor.getLevelType(line));
+                endLevel.setLine(line);
+                endLevel.setScopeLevel(scopeLevel);
+                states.add(endLevel);
                 break;
             case ";" :
-                printLineContents(line);
-                System.out.print(";\n");
+                State statement = new State();
+                statement.setLabel(labelExtractor.getStateLabel(line));
+                statement.setType(typeExtractor.getStateType(line));
+                statement.setLine(line);
+                statement.setId(IdGenerator.getIntegerId());
+                statement.setScopeLevel(scopeLevel);
+                states.add(statement);
                 break;
             case ":" :
-                printLineContents(line);
-                System.out.print(":\n");
+                State member = new State();
+                member.setLabel(labelExtractor.getStateLabel(line));
+                member.setType(typeExtractor.getStateType(line));
+                member.setLine(line);
+                member.setScopeLevel(scopeLevel);
+                states.add(member);
                 break;
             default:
-                System.out.println("No supposed to be here");
-        }
-    }
-
-    private void printLineContents (Line line) {
-        indent();
-        for (ParseTree keyword : line.getContent()) {
-            System.out.print(keyword.getText() + " ");
-        }
-    }
-
-    private void indent () {
-        for (int i = 0; i < scopeLevel; i++) {
-            System.out.print("  ");
+                //Do nothing
         }
     }
 

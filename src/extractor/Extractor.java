@@ -1,5 +1,6 @@
 package extractor;
 
+import extractor.tools.InstructionPrinter;
 import global.structure.Line;
 import extractor.state.StateWalker;
 import extractor.tools.Matrix;
@@ -33,7 +34,10 @@ public class Extractor {
 
         matrix.matrixGenerator(cppMatrix, parseTree);
         stateWalker.walk(cppMatrix, states);
-        transitionWalker.walk(cppMatrix, transitions);
+        transitionWalker.walk(states, transitions);
+
+        InstructionPrinter instructionPrinter = new InstructionPrinter();
+        instructionPrinter.print(states);
     }
 
 }

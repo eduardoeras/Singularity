@@ -1,5 +1,6 @@
 package extractor.transition;
 
+import global.structure.Instruction;
 import global.structure.Transition;
 import global.structure.Line;
 
@@ -11,7 +12,7 @@ public class TransitionWalker {
     //Constructor
 
     //Methods
-    public void walk (List<Line> cppMatrix, List<Transition> states) {
+    public void walk (List<Instruction> states, List<Transition> transitions) {
         System.out.println("Transition walker...");
     }
 }
