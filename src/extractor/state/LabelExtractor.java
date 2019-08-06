@@ -17,7 +17,7 @@ public class LabelExtractor {
     public String getLevelLabel(Line line) {
         String label = "";
         for (ParseTree keyword : line.getContent()) {
-            label = label.concat(keyword.getText());
+            label = label.concat(keyword.getText() + " ");
         }
         return stringTools.noSpecialCharacters(stringTools.beforeParenthesis(label));
     }
@@ -25,7 +25,7 @@ public class LabelExtractor {
     public String getStateLabel(Line line) {
         String label = "";
         for (ParseTree keyword : line.getContent()) {
-            label = label.concat(keyword.getText());
+            label = label.concat(keyword.getText() + " ");
         }
         return stringTools.noSpecialCharacters(label);
     }

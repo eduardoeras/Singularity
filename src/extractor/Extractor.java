@@ -5,7 +5,7 @@ import global.structure.Line;
 import extractor.state.StateWalker;
 import extractor.tools.Matrix;
 import extractor.transition.TransitionWalker;
-import global.structure.Instruction;
+import global.structure.State;
 import global.structure.Transition;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -27,7 +27,7 @@ public class Extractor {
 
     //Public Methods
     public void extract (ParseTree parseTree) {
-        List<Instruction> states = new ArrayList<>();
+        List<State> states = new ArrayList<>();
         List<Transition> transitions = new ArrayList<>();
         List<Line> cppMatrix = new ArrayList<>();
         cppMatrix.add(new Line());

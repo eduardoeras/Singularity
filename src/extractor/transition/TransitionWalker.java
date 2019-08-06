@@ -1,8 +1,7 @@
 package extractor.transition;
 
-import global.structure.Instruction;
+import global.structure.State;
 import global.structure.Transition;
-import global.structure.Line;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ public class TransitionWalker {
     //Constructor
 
     //Methods
-    public void walk (List<Instruction> states, List<Transition> transitions) {
-        System.out.println("Transition walker...");
+    public void walk (List<State> states, List<Transition> transitions) {
+
     }
 }

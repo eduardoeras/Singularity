@@ -18,8 +18,8 @@ public class StructureTest {
     public void test () {
         IdGenerator.reset();
 
-        Instruction origin = new Level();
-        Instruction destiny = new State();
+        State origin = new State();
+        State destiny = new State();
         Transition transition = new Transition();
 
         Event event = new Event();
