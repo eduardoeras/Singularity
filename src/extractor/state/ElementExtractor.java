@@ -4,7 +4,7 @@ import global.structure.Line;
 import global.structure.Element;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-public class elementExtractor {
+public class ElementExtractor {
     public Element getLevelElement(Line line) {
         if (line.getContent().isEmpty()) {
             return Element.NONE;
@@ -13,6 +13,10 @@ public class elementExtractor {
             switch (keyword.getText()) {
                 case "class" :
                     return Element.CLASS;
+                case "struct" :
+                    return Element.STRUCT;
+                case "namespace" :
+                    return Element.NAMESPACE;
                 case "for" :
                     return Element.LOOP;
                 case "do" :

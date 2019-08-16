@@ -2,23 +2,24 @@ package extractor.state;
 
 import global.structure.*;
 import global.tools.IdGenerator;
-import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.List;
 
 public class StateWalker {
     //Attributes
     private LabelExtractor labelExtractor;
-    private elementExtractor elementExtractor;
+    private ElementExtractor elementExtractor;
     private int scopeLevel;
     private Visibility visibility;
+    private String className;
 
     //Constructor
     public StateWalker () {
         labelExtractor = new LabelExtractor();
-        elementExtractor = new elementExtractor();
+        elementExtractor = new ElementExtractor();
         scopeLevel = 0;
         visibility = Visibility.NONE;
+        className = "";
     }
 
     //Public Methods
@@ -38,8 +39,16 @@ public class StateWalker {
                 newLevel.setElement(elementExtractor.getLevelElement(line));
                 newLevel.setLine(line);
                 newLevel.setScopeLevel(scopeLevel);
+                if (newLevel.getElement() == Element.CLASS) {
+                    className = extractClassName(newLevel.getLabel());
+                }
                 if (newLevel.getElement() == Element.FUNCTION) {
-                    newLevel.setVisibility(visibility);
+                    if (newLevel.getLabel().equals(className)) {
+                        newLevel.setElement(Element.CONSTRUCTOR);
+                        newLevel.setVisibility(Visibility.NONE);
+                    } else {
+                        newLevel.setVisibility(visibility);
+                    }
                 } else {
                     newLevel.setVisibility(Visibility.NONE);
                 }
@@ -66,11 +75,17 @@ public class StateWalker {
                 }
                 State statement = new State();
                 statement.setType(Type.STATE);
-                statement.setVisibility(Visibility.NONE);
                 statement.setLabel(labelExtractor.getStateLabel(line));
                 statement.setElement(elementExtractor.getStateElement(line));
+                statement.setVisibility(Visibility.NONE);
                 statement.setLine(line);
-                statement.setId(IdGenerator.getIntegerId());
+                if (statement.getElement() == Element.JUMP) {
+                    if (statement.getLine().getContent().get(0).getText().equals("return")) {
+                        statement.setId(IdGenerator.getIntegerId());
+                    }
+                } else {
+                    statement.setId(IdGenerator.getIntegerId());
+                }
                 statement.setScopeLevel(scopeLevel);
                 states.add(statement);
                 break;
@@ -83,16 +98,14 @@ public class StateWalker {
                     visibility = Visibility.PRIVATE;
                     break;
                 }
-                /*State member = new State();
-                member.setLabel(labelExtractor.getStateLabel(line));
-                member.setElement(typeExtractor.getStateType(line));
-                member.setLine(line);
-                member.setScopeLevel(scopeLevel);
-                states.add(member);*/
                 break;
             default:
                 //Do nothing
         }
+    }
+
+    private String extractClassName(String label) {
+        return label.substring(label.indexOf("_") + 1);
     }
 
 }

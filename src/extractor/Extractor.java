@@ -1,9 +1,9 @@
 package extractor;
 
-import extractor.tools.InstructionPrinter;
+import extractor.gears.InstructionPrinter;
 import global.structure.Line;
 import extractor.state.StateWalker;
-import extractor.tools.Matrix;
+import extractor.gears.Matrix;
 import extractor.transition.TransitionWalker;
 import global.structure.State;
 import global.structure.Transition;

@@ -16,10 +16,10 @@ public class SingularityTest {
     //Methods
     @Test
     public void mainTest () {
-        System.out.println("\n          ALLCONDITIONS\n");
+        /*System.out.println("\n          ALLCONDITIONS\n");
         singularity.run("test/data/allConditions.cpp");
         System.out.println("\n          TRIANGLE\n");
-        singularity.run("test/data/triangle.cpp");
+        singularity.run("test/data/triangle.cpp");*/
         System.out.println("\n          CONTEXT\n");
         singularity.run("test/data/context.cpp");
         System.out.println("\n          GENERALFUNCTIONS\n");
