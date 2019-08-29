@@ -53,6 +53,8 @@ public class ElementExtractor {
                     return Element.LOOP;
                 case "case" :
                     return Element.DECISION;
+                case "throw" :
+                    return Element.EXCEPTION;
             }
         }
         return Element.STATEMENT;

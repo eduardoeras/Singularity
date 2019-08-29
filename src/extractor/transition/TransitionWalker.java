@@ -21,7 +21,7 @@ public class TransitionWalker {
 
     //Public Methods
     public void walk (List<State> states, List<Transition> transitions) {
-        //createMainFunction(states);
+        createMainFunction(states);
     }
 
     //Private Methods

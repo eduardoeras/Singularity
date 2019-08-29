@@ -1,8 +1,6 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-
 public class SingularityTest {
     //Attributes
     Singularity singularity;
@@ -14,7 +12,7 @@ public class SingularityTest {
     }
 
     //Methods
-    //@Test
+    @Test
     public void controlTests () {
         System.out.println("\n          ALLCONDITIONS\n");
         singularity.run("test/data/allConditions.cpp");
@@ -23,7 +21,7 @@ public class SingularityTest {
         System.out.println("\n          POLYMORPHICPOINTERS\n");
         singularity.run("test/data/polymorphic_pointers.cpp");
     }
-    @Test
+    //@Test
     public void geoDmaBasics () {
         System.out.println("\n          CONTEXT\n");
         singularity.run("test/data/context.cpp");

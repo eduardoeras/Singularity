@@ -1,3 +1,4 @@
+import extractor.gears.StatePrinter;
 import global.exception.ReaderException;
 import global.tools.Reset;
 import reader.Reader;
@@ -11,6 +12,7 @@ public class Singularity {
     private Extractor extractor;
     private Constructor constructor;
     private Generator generator;
+    private StatePrinter statePrinter;
     private Reset reset;
 
     //Constructor
@@ -19,11 +21,13 @@ public class Singularity {
         extractor = new Extractor();
         constructor = new Constructor();
         generator = new Generator();
+        statePrinter = StatePrinter.getInstance();
         reset = new Reset();
     }
 
     //Methods
     public void run (String input) {
+        statePrinter.setFileName(input);
         try {
             extractor.extract(reader.read(input));
         }catch (ReaderException exception) {

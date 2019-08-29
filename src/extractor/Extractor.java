@@ -17,12 +17,14 @@ public class Extractor {
     private Matrix matrix;
     private StateWalker stateWalker;
     private TransitionWalker transitionWalker;
+    private StatePrinter instructionPrinter;
 
     //Constructor
     public Extractor () {
         matrix = new Matrix();
         stateWalker = new StateWalker();
         transitionWalker = new TransitionWalker();
+        instructionPrinter = StatePrinter.getInstance();
     }
 
     //Public Methods
@@ -36,8 +38,7 @@ public class Extractor {
         stateWalker.walk(cppMatrix, states);
         transitionWalker.walk(states, transitions);
 
-        StatePrinter instructionPrinter = new StatePrinter();
-        instructionPrinter.print(states);
+        //instructionPrinter.print(states);
     }
 
 }

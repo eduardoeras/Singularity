@@ -5,48 +5,81 @@ import global.structure.Element;
 import global.structure.Type;
 import global.structure.Visibility;
 
+import java.io.PrintWriter;
 import java.util.List;
 
 public class StatePrinter {
     //Attrbutes
+    private String fileName;
+    private static StatePrinter uniqueInstance;
 
     //Constructor
+    private StatePrinter () {
+        fileName = "";
+    }
 
-    //Methods
+    //Static Methods
+    public static StatePrinter getInstance() {
+        if (uniqueInstance == null) {
+            uniqueInstance = new StatePrinter();
+        }
+        return uniqueInstance;
+    }
+
+    //Public Methods
     public void print (List<State> states) {
+        String output = "";
         for (State state : states) {
-            String output = "";
+            String line = "";
             for (int i = 0; i < state.getScopeLevel(); i++) {
-                System.out.print("    ");
+                line = line.concat("    ");
             }
 
             if (state.getType() == Type.STATE) {
-                output = "<state label='";
+                line = line.concat("<state label='");
             } else {
                 if (state.getElement() == Element.NONE) {
-                    System.out.println("</level>");
+                    line = line.concat("</level>");
+                    output = output.concat(line + "\n");
                     continue;
                 } else {
-                    output = "<level label='";
+                    line = line.concat("<level label='");
                 }
             }
 
-            output = output.concat(state.getLabel());
-            output = output.concat("' element='");
-            output = output.concat(state.getElement().toString());
+            line = line.concat(state.getLabel());
+            line = line.concat("' element='");
+            line = line.concat(state.getElement().toString());
 
             if (state.getVisibility() != Visibility.NONE) {
-                output = output.concat("' visibility='");
-                output = output.concat(state.getVisibility().toString());
+                line = line.concat("' visibility='");
+                line = line.concat(state.getVisibility().toString());
             }
 
             if (state.getId() != -1) {
-                output = output.concat("' id='");
-                output = output.concat(String.valueOf(state.getId()));
+                line = line.concat("' id='");
+                line = line.concat(String.valueOf(state.getId()));
             }
 
-            output = output.concat("'>");
-            System.out.println(output);
+            line = line.concat("'>");
+            output = output.concat(line + "\n");
         }
+
+        System.out.print(output);
+        try {
+            PrintWriter printWriter = new PrintWriter(fileName + ".xml");
+            printWriter.print(output);
+            printWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setFileName (String fileName) {
+        this.fileName = fileName;
+    }
+
+    public void reset () {
+        fileName = "";
     }
 }
