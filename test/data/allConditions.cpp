@@ -1,12 +1,12 @@
+#include<iostream>
+
 class AllConditions {
 public:
     AllConditions (int a, int b, int c) : a_(a), b_(b), c_(c) {}
 
-    AllConditions (int a, int b, int c)
+    AllConditions ()
     {
-        a_ = a;
-        b_ = b;
-        c_ = c;
+        std::cout << "Empty Constructor" << std::endl;
     }
 
     int function (int var)
@@ -15,13 +15,22 @@ public:
         {
             std::cout << "content_if" << std::endl;
         }
+        else if (var = 2)
+        {
+            std::cout << "content_else_if" << std::endl;
+        }
+        else
+        {
+            std::cout << "content_else" << std::endl;
+        }
+
 
         for (int i=0; i < 2; i++)
         {
             std::cout << "content_for" << std::endl;
         }
 
-        for (element e : elements)
+        for (int e : {1, 2, 3})
         {
             std::cout << "content_enhanced_for" << std::endl;
         }
@@ -52,12 +61,15 @@ public:
     }
 
     private :
-        const int a_;
-        const int b_;
-        const int c_;
+        const int a_ = 0;
+        const int b_ = 0;
+        const int c_ = 0;
 };
 
 struct Structure {
+    Structure () {
+        std::cout << "Empty Structure Constructor" << std::endl;
+    }
     int structFunction ()
     {
         if (true) {

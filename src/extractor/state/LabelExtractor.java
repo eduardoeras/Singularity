@@ -15,13 +15,14 @@ public class LabelExtractor {
 
     //Methods
     public String getLevelLabel(Line line) {
-        String label = "";
-        for (ParseTree keyword : line.getContent()) {
-            if (!keyword.getText().equals("class")) {
-                label = label.concat(keyword.getText() + " ");
+        String last = "";
+        for (ParseTree parseTree : line.getContent()) {
+            if (parseTree.getText().equals("(")) {
+                return last;
             }
+            last = parseTree.getText();
         }
-        return stringTools.noSpecialCharacters(stringTools.beforeParenthesis(label));
+        return last;
     }
 
     public String getStateLabel(Line line) {

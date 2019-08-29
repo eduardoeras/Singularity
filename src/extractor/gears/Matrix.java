@@ -11,12 +11,18 @@ public class Matrix {
     private IfRecover ifRecover;
     private boolean ifStatement;
     private boolean forLoop;
+    private boolean caseCondition;
+    private int open;
+    private int close;
 
     //Constructor
     public Matrix () {
         ifRecover = new IfRecover();
         ifStatement = false;
         forLoop = false;
+        caseCondition = false;
+        open = 0;
+        close = 0;
     }
 
     //Public Methods
@@ -28,6 +34,11 @@ public class Matrix {
                     addParseTree(cppMatrix, parseTree);
                     setEndCharacterAndAddNewLine(cppMatrix, ":");
                     break;
+                case "case" :
+                case "default" :
+                    caseCondition = true;
+                    addParseTree(cppMatrix, parseTree);
+                    break;
                 case "if" :
                     ifStatement = true;
                     addParseTree(cppMatrix, parseTree);
@@ -36,10 +47,34 @@ public class Matrix {
                     forLoop = true;
                     addParseTree(cppMatrix, parseTree);
                     break;
+                case "(" :
+                    if (forLoop) {
+                        open++;
+                    }
+                    addParseTree(cppMatrix, parseTree);
+                    break;
+                case ")" :
+                    if (forLoop) {
+                        close++;
+                    }
+                    addParseTree(cppMatrix, parseTree);
+                    break;
                 case "{" :
-                    forLoop = false;
-                    ifStatement = false;
-                    setEndCharacterAndAddNewLine(cppMatrix, "{");
+                    if (open == close) {
+                        open = 0;
+                        close = 0;
+                        forLoop = false;
+                        ifStatement = false;
+                        setEndCharacterAndAddNewLine(cppMatrix, "{");
+                    } else {
+                        addParseTree(cppMatrix, parseTree);
+                    }
+                    break;
+                case ":" :
+                    if (caseCondition) {
+                        setEndCharacterAndAddNewLine(cppMatrix, ":");
+                        caseCondition = false;
+                    }
                     break;
                 case ";" :
                     if (ifStatement) {
@@ -52,7 +87,11 @@ public class Matrix {
                     }
                     break;
                 case "}" :
-                    setEndCharacterAndAddNewLine(cppMatrix, "}");
+                    if (!forLoop) {
+                        setEndCharacterAndAddNewLine(cppMatrix, "}");
+                    } else {
+                        addParseTree(cppMatrix, parseTree);
+                    }
                     break;
                 default:
                     addParseTree(cppMatrix, parseTree);

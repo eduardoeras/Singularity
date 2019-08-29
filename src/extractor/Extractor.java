@@ -1,6 +1,6 @@
 package extractor;
 
-import extractor.gears.InstructionPrinter;
+import extractor.gears.StatePrinter;
 import global.structure.Line;
 import extractor.state.StateWalker;
 import extractor.gears.Matrix;
@@ -36,7 +36,7 @@ public class Extractor {
         stateWalker.walk(cppMatrix, states);
         transitionWalker.walk(states, transitions);
 
-        InstructionPrinter instructionPrinter = new InstructionPrinter();
+        StatePrinter instructionPrinter = new StatePrinter();
         instructionPrinter.print(states);
     }
 

@@ -18,11 +18,8 @@ public class ElementExtractor {
                 case "namespace" :
                     return Element.NAMESPACE;
                 case "for" :
-                    return Element.LOOP;
                 case "do" :
-                    return Element.LOOP;
                 case "while" :
-                    return Element.LOOP;
                 case "switch" :
                     return Element.LOOP;
                 case "if" :
@@ -33,9 +30,10 @@ public class ElementExtractor {
                     }
                     break;
                 case "try" :
-                    return Element.EXCEPTION;
                 case "catch" :
                     return Element.EXCEPTION;
+                case "~":
+                    return Element.DESTRUCTOR;
             }
         }
         return Element.FUNCTION;
@@ -45,13 +43,16 @@ public class ElementExtractor {
         for (ParseTree keyword : line.getContent()) {
             switch (keyword.getText()) {
                 case "return" :
-                    return Element.JUMP;
                 case "break" :
-                    return Element.JUMP;
                 case "continue" :
+                case "default" :
                     return Element.JUMP;
                 case "=" :
                     return Element.ATTRIBUTION;
+                case "while" :
+                    return Element.LOOP;
+                case "case" :
+                    return Element.DECISION;
             }
         }
         return Element.STATEMENT;
