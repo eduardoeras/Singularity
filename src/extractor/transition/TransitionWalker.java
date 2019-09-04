@@ -1,7 +1,9 @@
 package extractor.transition;
 
+import global.structure.Element;
 import global.structure.State;
 import global.structure.Transition;
+import global.structure.Visibility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,17 +11,21 @@ import java.util.List;
 public class TransitionWalker {
     //Attributes
     private List<State> main;
+    private List<State> functions;
 
     //Constructor
     public TransitionWalker () {
         main = new ArrayList<>();
+        functions = new ArrayList<>();
     }
 
     //Public Methods
     public void walk (List<State> states, List<Transition> transitions) {
         createMainFunction(states);
+        collectFunctions(states);
         for (State state : main) {
-            findNext(state, states);
+            LevelIterator levelIterator = new LevelIterator(state.getScopeLevel());
+            levelIterator.iterate(state, states, functions, transitions);
         }
         main.clear();
     }
@@ -31,26 +37,19 @@ public class TransitionWalker {
                 case CONSTRUCTOR:
                 case FUNCTION:
                 case OPERATOR:
-                    main.add(state);
+                    if (state.getVisibility() != Visibility.PRIVATE) {
+                        main.add(state);
+                    }
                     break;
-                default:
-                    //do nothing
             }
         }
     }
 
-    private void findNext(State state, List<State> states) {
-        System.out.println(states.get(states.indexOf(state)).getLabel());
-        switch (state.getElement()) {
-            case FUNCTION:
-            case OPERATOR:
-            case CONSTRUCTOR:
-            case DESTRUCTOR:
-                try {
-                    findNext(states.get(states.indexOf(state) + 1), states);
-                } catch (Exception e){
-                    System.out.println("NOTHING NEXT");
-                }
+    private void collectFunctions(List<State> states) {
+        for (State state : states) {
+            if (state.getElement() == Element.FUNCTION) {
+                functions.add(state);
+            }
         }
     }
 

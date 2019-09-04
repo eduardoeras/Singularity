@@ -1,6 +1,7 @@
 package extractor;
 
-import extractor.gears.StatePrinter;
+import extractor.tools.StatePrinter;
+import extractor.tools.TransitionPrinter;
 import global.structure.Line;
 import extractor.state.StateWalker;
 import extractor.gears.Matrix;
@@ -17,14 +18,14 @@ public class Extractor {
     private Matrix matrix;
     private StateWalker stateWalker;
     private TransitionWalker transitionWalker;
-    private StatePrinter instructionPrinter;
+    private StatePrinter statePrinter;
 
     //Constructor
     public Extractor () {
         matrix = new Matrix();
         stateWalker = new StateWalker();
         transitionWalker = new TransitionWalker();
-        instructionPrinter = StatePrinter.getInstance();
+        statePrinter = StatePrinter.getInstance();
     }
 
     //Public Methods
@@ -38,7 +39,9 @@ public class Extractor {
         stateWalker.walk(cppMatrix, states);
         transitionWalker.walk(states, transitions);
 
-        //instructionPrinter.print(states);
+        //statePrinter.print(states);
+        TransitionPrinter transitionPrinter = new TransitionPrinter();
+        transitionPrinter.print(transitions);
     }
 
 }

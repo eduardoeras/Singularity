@@ -1,4 +1,4 @@
-package extractor.gears;
+package extractor.tools;
 
 import global.structure.State;
 import global.structure.Element;

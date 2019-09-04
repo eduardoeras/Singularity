@@ -1,4 +1,4 @@
-import extractor.gears.StatePrinter;
+import extractor.tools.StatePrinter;
 import global.exception.ReaderException;
 import global.tools.Reset;
 import reader.Reader;
