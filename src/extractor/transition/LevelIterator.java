@@ -22,7 +22,7 @@ public class LevelIterator {
         try {
             State next = states.get(states.indexOf(state) + 1);
             if (next.getScopeLevel() > scopeLevel) {
-                process(state, functions, transitions);
+                process(state, functions, states, transitions);
                 iterate(next,states, functions, transitions);
             }
         } catch (Exception e) {
@@ -31,74 +31,72 @@ public class LevelIterator {
     }
 
     //Private Methods
-    private void process(State state, List<State> functions, List<Transition> transitions) {
+    private void process(State state, List<State> functions, List<State> states, List<Transition> transitions) {
         if (state.getType() == Type.STATE) {
             switch (state.getElement()) {
                 case JUMP:
-                    System.out.println("JUMP: " + state.getLabel());
-                    findFunctionCall(state, functions, transitions);
+                    findFunctionCall(state, functions, states, transitions);
                     break;
                 case ATTRIBUTION:
-                    System.out.println("ATTRIBUTION: " + state.getLabel());
-                    findFunctionCall(state, functions, transitions);
+                    findFunctionCall(state, functions, states, transitions);
                     break;
                 case STATEMENT:
-                    System.out.println("STATEMENT: " + state.getLabel());
-                    findFunctionCall(state, functions, transitions);
+                    findFunctionCall(state, functions, states, transitions);
                     break;
                 default:
             }
         } else {
             switch (state.getElement()) {
                 case LOOP:
-                    System.out.println("LOOP: " + state.getLabel());
-                    findFunctionCall(state, functions, transitions);
+                    findFunctionCall(state, functions, states, transitions);
+                    switch (state.getLabel()) {
+                        case "for":
+                            decisionLoopTransition(state, states, transitions);
+                            break;
+                        case "do":
+                            //System.out.println("D O   L O O P");
+                            break;
+                        case "while":
+                            //System.out.println("W H I L E   L O O P");
+                            break;
+                        case "switch":
+                            //System.out.println("S W I T C H   L O O P");
+                            break;
+                    }
                     break;
                 case DECISION:
-                    System.out.println("DECISION: " + state.getLabel());
-                    findFunctionCall(state, functions, transitions);
+                    findFunctionCall(state, functions, states, transitions);
+                    decisionLoopTransition(state, states, transitions);
                     break;
                 case EXCEPTION:
-                    System.out.println("EXCEPTION: " + state.getLabel());
-                    findFunctionCall(state, functions, transitions);
+                    findFunctionCall(state, functions, states, transitions);
                     break;
                 case NAMESPACE:
-                    System.out.println("NAMESPACE: " + state.getLabel());
                     break;
                 case CLASS:
-                    System.out.println("CLASS: " + state.getLabel());
                     break;
                 case STRUCT:
-                    System.out.println("STRUCT: " + state.getLabel());
                     break;
                 case FUNCTION:
-                    System.out.println("FUNCTION: " + state.getLabel());
                     break;
                 case CONSTRUCTOR:
-                    System.out.println("CONSTRUCTOR: " + state.getLabel());
                     break;
                 case DESTRUCTOR:
-                    System.out.println("DESTRUCTOR: " + state.getLabel());
                     break;
                 case OPERATOR:
-                    System.out.println("OPERATOR: " + state.getLabel());
                     break;
                 default:
             }
         }
     }
 
-    private void findFunctionCall(State state, List<State> functions, List<Transition> transitions) {
+    private void findFunctionCall(State state, List<State> functions, List<State> states, List<Transition> transitions) {
         for (ParseTree word : state.getLine().getContent()) {
             if (isFunction(word, functions)) {
-                System.out.println("### FUNCTION CALL: " + word.getText());
-                Transition transition = new Transition();
-                Event event = new Event();
-                event.setEvent("lambda");
-                transition.setEvent(event);
-                transition.setFrom(state);
-                transition.setTo(getDestinyFunction(word, functions));
-                transitions.add(transition);
+                State destiny = getDestinyFunction(word, functions);
+                createTransition("lambda", state, destiny, transitions);
+                LevelIterator levelIterator = new LevelIterator(destiny.getScopeLevel());
+                levelIterator.iterate(destiny, states, functions, transitions);
                 break;
             }
         }
@@ -120,5 +118,47 @@ public class LevelIterator {
             }
         }
         return null;
+    }
+
+    private void createTransition (String eventName, State origin, State destiny, List<Transition> transitions) {
+        if (origin != null && destiny != null) {
+            Transition transition = new Transition();
+            Event event = new Event();
+            event.setEvent(eventName);
+            transition.setEvent(event);
+            transition.setFrom(origin);
+            transition.setTo(destiny);
+            transitions.add(transition);
+        }
+    }
+
+    private State getNextState (State state, List<State> states) {
+        try {
+            return states.get(states.indexOf(state) + 1);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private State validateNextState(State state, List<State> states) {
+        while (state.getId() < 1) {
+            state = getNextState(state, states);
+            if (state == null) {
+                break;
+            }
+        }
+        return state;
+    }
+
+    private void decisionLoopTransition (State state, List<State> states, List<Transition> transitions) {
+        State nextTrue = getNextState(state, states);
+        nextTrue = validateNextState(nextTrue, states);
+        createTransition("TRUE", state, nextTrue, transitions);
+        State nextFalse = getNextState(state, states);
+        while (nextFalse.getScopeLevel() > state.getScopeLevel()) {
+            nextFalse = getNextState(nextFalse, states);
+        }
+        nextFalse = validateNextState(nextFalse, states);
+        createTransition("FALSE", state, nextFalse, transitions);
     }
 }
