@@ -1,9 +1,6 @@
 package extractor.transition;
 
-import global.structure.Element;
-import global.structure.State;
-import global.structure.Transition;
-import global.structure.Visibility;
+import global.structure.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,20 +9,25 @@ public class TransitionWalker {
     //Attributes
     private List<State> main;
     private List<State> functions;
+    private TransitionTools tools;
+    private Transition last;
 
     //Constructor
     public TransitionWalker () {
         main = new ArrayList<>();
         functions = new ArrayList<>();
+        tools = new TransitionTools();
+        last = tools.createInitialState();
     }
 
     //Public Methods
     public void walk (List<State> states, List<Transition> transitions) {
         createMainFunction(states);
         collectFunctions(states);
-        for (State state : main) {
-            LevelIterator levelIterator = new LevelIterator(state.getScopeLevel());
-            levelIterator.iterate(state, states, functions, transitions);
+        for (State destiny : main) {
+            Transition transition = tools.createTransition(last.getEvent().getEvent(), last.getFrom(), destiny);
+            LevelIterator levelIterator = new LevelIterator(destiny.getScopeLevel());
+            last = levelIterator.iterate(transition, states, functions, transitions);
         }
         main.clear();
     }
