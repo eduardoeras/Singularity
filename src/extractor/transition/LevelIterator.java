@@ -19,11 +19,10 @@ public class LevelIterator {
 
     //Public Methods
     public Transition iterate(Transition transition, List<State> states, List<State> functions, List<Transition> transitions) {
-        Transition next = process(transition, functions, states, transitions);
-        if (next.getTo() != null && next.getTo().getScopeLevel() > scopeLevel) {
-            iterate(next, states, functions, transitions);
-        }
-        return next;
+        do {
+            transition = process(transition, functions, states, transitions);
+        } while (transition.getTo() != null && transition.getTo().getScopeLevel() > scopeLevel);
+        return transition;
     }
 
     //Private Methods
@@ -35,72 +34,37 @@ public class LevelIterator {
                 tools.findFunctionCall(transition, functions, states, transitions);
                 State next = tools.getNextState(transition.getTo(), states);
                 return tools.createTransition("lambda",transition.getTo(),next);
-            case LOOP:
             case DECISION:
+                transitions.add(transition);
+                tools.findFunctionCall(transition, functions, states, transitions);
+
+                State nextTrue = tools.getNextState(transition.getTo(), states);
+                if (nextTrue.getScopeLevel() > transition.getTo().getScopeLevel()) {
+                    LevelIterator newLevel = new LevelIterator(transition.getTo().getScopeLevel());
+                    newLevel.iterate(tools.createTransition("TRUE", transition.getTo(), nextTrue), states, functions, transitions);
+                }
+                State nextFalse = tools.getNextState(transition.getTo(), states);
+                while (nextFalse.getScopeLevel() > transition.getTo().getScopeLevel()) {
+                    nextFalse = tools.getNextState(nextFalse, states);
+                }
+                return tools.createTransition("FALSE", transition.getTo(), nextFalse);
             default:
                 State nextState = tools.getNextState(transition.getTo(), states);
                 return tools.createTransition(transition.getEvent().getEvent(),transition.getFrom(),nextState);
         }
-
-
-
-        /*if (state.getType() == Type.STATE) {
-            switch (state.getElement()) {
-                case JUMP:
-                    tools.findFunctionCall(state, functions, states, transitions);
-                    //Jump to somewhere
-                    break;
-                case ATTRIBUTION:
-                case STATEMENT:
-                    tools.findFunctionCall(state, functions, states, transitions);
-                    State destiny = tools.getNextState(state, states);
-                    destiny = tools.validateNextState(destiny, states, scopeLevel);
-                    tools.createTransition("lambda", state, destiny, transitions);
-                    break;
-                default:
-            }
-        } else {
-            switch (state.getElement()) {
-                case LOOP:
-                    tools.findFunctionCall(state, functions, states, transitions);
-                    switch (state.getLabel()) {
-                        case "for":
-                            tools.decisionLoopTransition(state, states, transitions, scopeLevel);
-                            break;
-                        case "do":
-
-                            break;
-                        case "while":
-                            break;
-                        case "switch":
-                            //System.out.println("S W I T C H   L O O P");
-                            break;
-                    }
-                    break;
-                case DECISION:
-                    tools.findFunctionCall(state, functions, states, transitions);
-                    tools.decisionLoopTransition(state, states, transitions, scopeLevel);
-                    break;
-                case EXCEPTION:
-                    tools.findFunctionCall(state, functions, states, transitions);
-                    break;
-                case NAMESPACE:
-                    break;
-                case CLASS:
-                    break;
-                case STRUCT:
-                    break;
-                case FUNCTION:
-                    break;
-                case CONSTRUCTOR:
-                    break;
-                case DESTRUCTOR:
-                    break;
-                case OPERATOR:
-                    break;
-                default:
-            }
-        }*/
     }
 
+    /*public void decisionLoopTransition (State state, List<State> states, List<Transition> transitions, int scopeLevel) {
+        State nextTrue = getNextState(state, states);
+        nextTrue = validateNextState(nextTrue, states, scopeLevel);
+        createTransition("TRUE", state, nextTrue, transitions);
+        State nextFalse = getNextState(state, states);
+        while (nextFalse.getScopeLevel() > state.getScopeLevel()) {
+            nextFalse = getNextState(nextFalse, states);
+        }
+        nextFalse = validateNextState(nextFalse, states, scopeLevel);
+        createTransition("FALSE", state, nextFalse, transitions);
+    }*/
+
 }
+
