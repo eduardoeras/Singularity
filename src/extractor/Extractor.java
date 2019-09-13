@@ -1,10 +1,10 @@
 package extractor;
 
-import extractor.tools.StatePrinter;
+//import extractor.tools.StatePrinter;
 import extractor.tools.TransitionPrinter;
 import global.structure.Line;
 import extractor.state.StateWalker;
-import extractor.gears.Matrix;
+import extractor.state.Matrix;
 import extractor.transition.TransitionWalker;
 import global.structure.State;
 import global.structure.Transition;
@@ -18,14 +18,14 @@ public class Extractor {
     private Matrix matrix;
     private StateWalker stateWalker;
     private TransitionWalker transitionWalker;
-    private StatePrinter statePrinter;
+    //private StatePrinter statePrinter;
 
     //Constructor
     public Extractor () {
         matrix = new Matrix();
         stateWalker = new StateWalker();
         transitionWalker = new TransitionWalker();
-        statePrinter = StatePrinter.getInstance();
+        //statePrinter = StatePrinter.getInstance();
     }
 
     //Public Methods

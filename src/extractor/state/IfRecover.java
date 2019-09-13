@@ -1,4 +1,4 @@
-package extractor.gears;
+package extractor.state;
 
 import global.structure.Line;
 import org.antlr.v4.runtime.tree.ParseTree;

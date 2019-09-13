@@ -24,11 +24,7 @@ public class TransitionWalker {
     public void walk (List<State> states, List<Transition> transitions) {
         createMainFunction(states);
         collectFunctions(states);
-        for (State destiny : main) {
-            Transition transition = tools.createTransition(last.getEvent().getEvent(), last.getFrom(), destiny);
-            LevelIterator levelIterator = new LevelIterator(destiny.getScopeLevel());
-            last = levelIterator.iterate(transition, states, functions, transitions);
-        }
+        loop(states, transitions);
         main.clear();
     }
 
@@ -52,6 +48,15 @@ public class TransitionWalker {
             if (state.getElement() == Element.FUNCTION) {
                 functions.add(state);
             }
+        }
+    }
+
+    private void loop (List<State> states, List<Transition> transitions) {
+        List<Transition> response = new ArrayList<>();
+        response.add(tools.createTransition(last.getEvent().getEvent(), last.getFrom(), null));
+        for (State destiny : main) {
+            Iterator iterator = new Iterator(destiny.getScopeLevel());
+            response = iterator.iterate(destiny, response, states, transitions);
         }
     }
 

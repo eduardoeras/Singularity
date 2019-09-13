@@ -43,7 +43,9 @@ public:
 
         do
         {
-            std::cout << "content_do" << std::endl;
+            std::cout << "content_do_1" << std::endl;
+            std::cout << "content_do_2" << std::endl;
+            std::cout << "content_do_3" << std::endl;
         } while (var == 3);
 
         switch(var) {

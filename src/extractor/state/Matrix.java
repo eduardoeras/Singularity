@@ -1,4 +1,4 @@
-package extractor.gears;
+package extractor.state;
 
 import global.structure.Line;
 

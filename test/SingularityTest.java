@@ -16,10 +16,10 @@ public class SingularityTest {
     public void controlTests () {
         System.out.println("\n          ALLCONDITIONS\n");
         singularity.run("test/data/allConditions.cpp");
-        System.out.println("\n          TRIANGLE\n");
-        singularity.run("test/data/triangle.cpp");
-        System.out.println("\n          POLYMORPHICPOINTERS\n");
-        singularity.run("test/data/polymorphic_pointers.cpp");
+        //System.out.println("\n          TRIANGLE\n");
+        //singularity.run("test/data/triangle.cpp");
+        //System.out.println("\n          POLYMORPHICPOINTERS\n");
+        //singularity.run("test/data/polymorphic_pointers.cpp");
     }
     //@Test
     public void geoDmaBasics () {

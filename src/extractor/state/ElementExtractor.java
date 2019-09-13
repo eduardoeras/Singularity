@@ -5,6 +5,8 @@ import global.structure.Element;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 public class ElementExtractor {
+
+    //Methods
     public Element getLevelElement(Line line) {
         if (line.getContent().isEmpty()) {
             return Element.NONE;
@@ -26,7 +28,7 @@ public class ElementExtractor {
                     return Element.DECISION;
                 case "else" :
                     if (line.getContent().size() == 1) {
-                        return Element.JUMP;
+                        return Element.DECISION;
                     }
                     break;
                 case "try" :

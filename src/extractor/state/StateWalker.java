@@ -74,7 +74,7 @@ public class StateWalker {
                     newLevel.setVisibility(Visibility.NONE);
                 }
                 if (newLevel.getElement() == Element.DECISION || newLevel.getElement() == Element.LOOP) {
-                    if (!newLevel.getLabel().equals("do") && !newLevel.getLabel().equals("switch")) {
+                    if (!newLevel.getLabel().equals("do") && !newLevel.getLabel().equals("switch") && !newLevel.getLabel().equals("else")) {
                         newLevel.setId(IdGenerator.getIntegerId());
                     }
                 }
@@ -116,7 +116,7 @@ public class StateWalker {
                 if (firstWordInLine(line, "case") || firstWordInLine(line, "default")) {
                     State caseLevel = new State();
                     caseLevel.setType(Type.STATE);
-                    caseLevel.setLabel(labelExtractor.getLevelLabel(line));
+                    caseLevel.setLabel("case_" + labelExtractor.getLevelLabel(line));
                     caseLevel.setElement(elementExtractor.getStateElement(line));
                     caseLevel.setLine(line);
                     caseLevel.setScopeLevel(scopeLevel);

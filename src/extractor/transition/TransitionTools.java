@@ -55,6 +55,25 @@ public class TransitionTools {
         }
     }
 
+    /*public Transition decisionLoop (Transition transition,List<State> states, List<State> functions, List<Transition> transitions) {
+        if (decision) {
+            State nextTrue = getNextState(transition.getTo(), states);
+            LevelIterator levelIterator = new LevelIterator(transition.getTo().getScopeLevel());
+            return levelIterator.iterate(
+                    createTransition("TRUE", transition.getTo(), nextTrue),
+                    states,
+                    functions,
+                    transitions
+            );
+        } else {
+            State nextFalse = getNextState(transition.getTo(), states);
+            while (nextFalse.getScopeLevel() > transition.getTo().getScopeLevel()) {
+                nextFalse = getNextState(nextFalse, states);
+            }
+            return createTransition("FALSE", transition.getTo(), nextFalse);
+        }
+    }*/
+
     //Private Methods
     private boolean isFunction (ParseTree word, List<State> functions) {
         for (State function : functions) {
