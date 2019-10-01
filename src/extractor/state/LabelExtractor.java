@@ -28,7 +28,9 @@ public class LabelExtractor {
     public String getStateLabel(Line line) {
         String label = "";
         for (ParseTree keyword : line.getContent()) {
-            label = label.concat(keyword.getText() + " ");
+            if (!keyword.getText().equals("std") && !keyword.getText().equals("cout") && !keyword.getText().equals("endl")) {
+                label = label.concat(keyword.getText() + " ");
+            }
         }
         return stringTools.noSpecialCharacters(label);
     }

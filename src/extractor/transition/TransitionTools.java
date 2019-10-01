@@ -1,14 +1,19 @@
 package extractor.transition;
 
 import global.structure.*;
+import global.tools.StringTools;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.List;
 
 public class TransitionTools {
     //Attributes
+    private StringTools stringTools;
 
     //Constructor
+    public TransitionTools () {
+        stringTools = new StringTools();
+    }
 
     //Public Methods
     public Transition createInitialState () {
@@ -30,6 +35,18 @@ public class TransitionTools {
         }
     }
 
+    public State getNextSameLevelState (State state, List<State> states) {
+        State output = state;
+        try {
+            do {
+                output = states.get(states.indexOf(output) + 1);
+            } while (output.getScopeLevel() != state.getScopeLevel() || output.getLabel().equals("}"));
+            return output;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public Transition createTransition (String eventName, State origin, State destiny) {
         Transition transition = new Transition();
         Event event = new Event();
@@ -40,57 +57,18 @@ public class TransitionTools {
         return transition;
     }
 
-    public void findFunctionCall(Transition transition, List<State> functions, List<State> states, List<Transition> transitions) {
-        for (ParseTree word : transition.getTo().getLine().getContent()) {
-            if (isFunction(word, functions)) {
-                State destiny = getDestinyFunction(word, functions);
-                Transition newTransition = createTransition("lambda", transition.getTo(), destiny);
-                LevelIterator levelIterator = new LevelIterator(destiny.getScopeLevel());
-                Transition external = levelIterator.iterate(newTransition, states, functions, transitions);
-                if (external.getFrom() != transition.getTo()) {
-                    transitions.add(createTransition(external.getEvent().getEvent(), external.getFrom(), transition.getTo()));
-                }
-                break;
+    public String extractEvent(Line line) {
+        boolean flag = false;
+        for (ParseTree element : line.getContent()) {
+            if (element.getText().equals("cout")) {
+                flag = true;
+                continue;
+            }
+            if (flag && !element.getText().equals("<<")) {
+                return stringTools.noSpecialCharacters(element.getText());
             }
         }
-    }
-
-    /*public Transition decisionLoop (Transition transition,List<State> states, List<State> functions, List<Transition> transitions) {
-        if (decision) {
-            State nextTrue = getNextState(transition.getTo(), states);
-            LevelIterator levelIterator = new LevelIterator(transition.getTo().getScopeLevel());
-            return levelIterator.iterate(
-                    createTransition("TRUE", transition.getTo(), nextTrue),
-                    states,
-                    functions,
-                    transitions
-            );
-        } else {
-            State nextFalse = getNextState(transition.getTo(), states);
-            while (nextFalse.getScopeLevel() > transition.getTo().getScopeLevel()) {
-                nextFalse = getNextState(nextFalse, states);
-            }
-            return createTransition("FALSE", transition.getTo(), nextFalse);
-        }
-    }*/
-
-    //Private Methods
-    private boolean isFunction (ParseTree word, List<State> functions) {
-        for (State function : functions) {
-            if (function.getLabel().equals(word.getText())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private State getDestinyFunction (ParseTree word, List<State> functions) {
-        for (State function : functions) {
-            if (function.getLabel().equals(word.getText())) {
-                return function;
-            }
-        }
-        return null;
+        return "lambda";
     }
 
 }

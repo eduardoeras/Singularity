@@ -10,20 +10,22 @@ public class Iterator {
     //Attributes
     private TransitionTools tools;
     private int scopeLevel;
+    private State next;
+
     //Constructor
-    public Iterator (int scopeLevel) {
+    public Iterator (State state, int scopeLevel) {
         tools = new TransitionTools();
         this.scopeLevel = scopeLevel;
+        next = state;
     }
 
     //Methods
-    public List<Transition> iterate (State state, List<Transition> response, List<State> states, List<Transition> transitions) {
+    public List<Transition> iterate (List<Transition> response, List<State> states, List<Transition> transitions) {
         List<Transition> newResponse;
         do {
-            newResponse = (process (state, response, states, transitions));
+            newResponse = (process (next, response, states, transitions));
             response = newResponse;
-            state = tools.getNextState(state, states);
-        } while (state.getScopeLevel() > scopeLevel);
+        } while (next.getScopeLevel() > scopeLevel);
         return newResponse;
     }
 
@@ -32,16 +34,36 @@ public class Iterator {
         switch (state.getElement()) {
             case ATTRIBUTION:
             case STATEMENT:
-                for (Transition transition : response) {
-                    transition.setTo(state);
-                    transitions.add(transition);
+                createTransition(response, state, transitions);
+                String event = tools.extractEvent(state.getLine());
+                newResponse.add(tools.createTransition(event, state, null));
+                next = tools.getNextState(state, states);
+                break;
+            case DECISION:
+                if (state.getLabel().equals("if")) {
+                    createTransition(response, state, transitions);
+                    List<Transition> trueResponse = new ArrayList<>();
+                    trueResponse.add(tools.createTransition("TRUE", state, null));
+                    Iterator iterator = new Iterator(tools.getNextState(state, states), state.getScopeLevel());
+                    newResponse.addAll(iterator.iterate(trueResponse, states, transitions));
+                    do {
+                        next = tools.getNextSameLevelState(next, states);
+                    } while (next.getLabel().equals("else") || next.getLabel().equals("else_if"));
+                    newResponse.add(tools.createTransition("FALSE", state, null));
                 }
-                Transition newTransition = tools.createTransition("lambda", state, null);
-                newResponse.add(newTransition);
                 break;
             default:
+                next = tools.getNextState(state, states);
                 return response;
         }
         return newResponse;
     }
+
+    private void createTransition (List<Transition> response, State state, List<Transition> transitions) {
+        for (Transition transition : response) {
+            transition.setTo(state);
+            transitions.add(transition);
+        }
+    }
+
 }
