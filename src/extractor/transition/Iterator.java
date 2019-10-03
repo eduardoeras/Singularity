@@ -56,6 +56,14 @@ public class Iterator {
                     }
                 }
                 break;
+            case LOOP:
+                createTransition(response, state, transitions);
+                if (state.getLabel().equals("for")) {
+                    newResponse.add(tools.createTransition("FALSE", state, null));
+                    newResponse.addAll(iterateLoop(states, transitions));
+                    state = tools.getNextSameLevelState(state, states);
+                }
+                break;
             default:
                 state = tools.getNextState(state, states);
                 return response;
