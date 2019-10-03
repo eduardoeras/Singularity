@@ -40,6 +40,9 @@ public class TransitionTools {
         try {
             do {
                 output = states.get(states.indexOf(output) + 1);
+                if (output.getScopeLevel() < state.getScopeLevel()) {
+                    break;
+                }
             } while (output.getScopeLevel() != state.getScopeLevel() || output.getLabel().equals("}"));
             return output;
         } catch (Exception e) {

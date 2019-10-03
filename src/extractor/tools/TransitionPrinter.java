@@ -16,9 +16,9 @@ public class TransitionPrinter {
     public void print (List<Transition> transitions) {
         for (Transition transition : transitions) {
             System.out.print("<transition from = '");
-            System.out.print(transition.getFrom().getLabel());
+            System.out.print(transition.getFrom().getLabel() + "_" + transition.getFrom().getId());
             System.out.print("' to = '");
-            System.out.print(transition.getTo().getLabel());
+            System.out.print(transition.getTo().getLabel() + "_" + transition.getTo().getId());
             System.out.print("' event = '");
             System.out.print(transition.getEvent().getEvent());
             System.out.println("'>");
