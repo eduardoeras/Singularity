@@ -113,10 +113,26 @@ public class StateWalker {
                 states.add(statement);
                 break;
             case ":" :
-                if (firstWordInLine(line, "case") || firstWordInLine(line, "default")) {
+                if (firstWordInLine(line, "case")) {
                     State caseLevel = new State();
                     caseLevel.setType(Type.STATE);
-                    caseLevel.setLabel("case_" + labelExtractor.getLevelLabel(line));
+                    //caseLevel.setLabel("case_" + labelExtractor.getLevelLabel(line));
+                    caseLevel.setLabel("case");
+                    caseLevel.setElement(elementExtractor.getStateElement(line));
+                    caseLevel.setLine(line);
+                    caseLevel.setScopeLevel(scopeLevel);
+                    caseLevel.setVisibility(Visibility.NONE);
+                    if (caseLevel.getElement() != Element.JUMP) {
+                        caseLevel.setId(IdGenerator.getIntegerId());
+                    }
+                    states.add(caseLevel);
+                    break;
+                }
+                if (firstWordInLine(line, "default")) {
+                    State caseLevel = new State();
+                    caseLevel.setType(Type.STATE);
+                    //caseLevel.setLabel("default_" + labelExtractor.getLevelLabel(line));
+                    caseLevel.setLabel("default");
                     caseLevel.setElement(elementExtractor.getStateElement(line));
                     caseLevel.setLine(line);
                     caseLevel.setScopeLevel(scopeLevel);

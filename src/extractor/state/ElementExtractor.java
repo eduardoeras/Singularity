@@ -47,13 +47,13 @@ public class ElementExtractor {
                 case "return" :
                 case "break" :
                 case "continue" :
-                case "default" :
                     return Element.JUMP;
                 case "=" :
                     return Element.ATTRIBUTION;
                 case "while" :
                     return Element.LOOP;
                 case "case" :
+                case "default" :
                     return Element.DECISION;
                 case "throw" :
                     return Element.EXCEPTION;

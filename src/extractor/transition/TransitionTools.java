@@ -50,6 +50,21 @@ public class TransitionTools {
         }
     }
 
+    public State getNextSameLevelDecision (State state, List<State> states) {
+        State output = state;
+        try {
+            do {
+                output = states.get(states.indexOf(output) + 1);
+                if (output.getScopeLevel() < state.getScopeLevel()) {
+                    break;
+                }
+            } while (output.getScopeLevel() != state.getScopeLevel() || output.getElement() != Element.DECISION);
+            return output;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public Transition createTransition (String eventName, State origin, State destiny) {
         Transition transition = new Transition();
         Event event = new Event();

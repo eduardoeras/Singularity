@@ -17,9 +17,9 @@ public class SingularityTest {
         //System.out.println("\n          ALLCONDITIONS\n");
         //singularity.run("test/data/allConditions.cpp");
         //System.out.println("\n          TRIANGLE\n");
-        singularity.run("test/data/triangle.cpp");
+        //singularity.run("test/data/triangle.cpp");
         System.out.println("\n          MINIMAL\n");
-        //singularity.run("test/data/minimal.cpp");
+        singularity.run("test/data/minimal.cpp");
         //System.out.println("\n          POLYMORPHICPOINTERS\n");
         //singularity.run("test/data/polymorphic_pointers.cpp");
     }
