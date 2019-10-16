@@ -105,6 +105,7 @@ public class StateWalker {
                 if (statement.getElement() == Element.JUMP) {
                     if (firstWordInLine(statement.getLine(), "return")) {
                         statement.setId(IdGenerator.getIntegerId());
+                        statement.setLabel("return");
                     }
                 } else {
                     statement.setId(IdGenerator.getIntegerId());

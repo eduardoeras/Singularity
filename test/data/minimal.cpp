@@ -1,7 +1,24 @@
 #include<iostream>
 
-void function(int input)
+int function(int input)
 {
+    /*std::cout << "Before" << std::endl;
+    while (1 > input)
+    {
+        input ++;
+        std::cout << "Inside" << std::endl;
+    }
+    std::cout << "after" << std::endl;*/
+
+    std::cout << "Before" << std::endl;
+    do
+    {
+        input --;
+        std::cout << "Inside" << std::endl;
+    }
+    while (1 < input);
+    std::cout << "after" << std::endl;
+
     /*std::cout << "Before" << std::endl;
     if (true)
     {
@@ -30,7 +47,7 @@ void function(int input)
                 std::cout << "inside" << std::endl;
             }
     }
-    std::cout << "after" << std::endl;*/
+    std::cout << "after" << std::endl;
 
     std::cout << "before" << std::endl;
     switch (input)
@@ -45,6 +62,7 @@ void function(int input)
             break;
         case 5:
             std::cout << "five" << std::endl;
+            return 11112;
         case 6:
             std::cout << "six" << std::endl;
         case 7:
@@ -60,7 +78,8 @@ void function(int input)
     std::cout << "after" << std::endl;
 
     switch (input) {
-    }
+    }*/
 
     std::cout << "aftermath" << std::endl;
+
 }

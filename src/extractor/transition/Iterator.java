@@ -1,7 +1,5 @@
 package extractor.transition;
 
-import global.structure.Element;
-import global.structure.Event;
 import global.structure.State;
 import global.structure.Transition;
 
@@ -45,20 +43,20 @@ public class Iterator {
                     return response;
                 }
                 if (state.getLabel().equals("return")) {
-                    createTransition(response, state, transitions);
-                    newResponse.add(tools.createTransition(extractEvent(state), state, null));
+                    finalizeTransition(response, state, transitions);
+                    transitions.add(tools.createTransition(extractEvent(state), state, tools.createFinalState()));
                     breakFlag = true;
-                    break;
+                    return response;
                 }
             case ATTRIBUTION:
             case STATEMENT:
-                createTransition(response, state, transitions);
+                finalizeTransition(response, state, transitions);
                 String event = tools.extractEvent(state.getLine());
                 newResponse.add(tools.createTransition(event, state, null));
                 state = tools.getNextState(state, states);
                 break;
             case DECISION:
-                createTransition(response, state, transitions);
+                finalizeTransition(response, state, transitions);
                 if (state.getLabel().equals("if")) {
                     while (true) {
                         List<Transition> falseResponse = new ArrayList<>();
@@ -69,7 +67,7 @@ public class Iterator {
                             newResponse.addAll(falseResponse);
                             break;
                         } else {
-                            createTransition(falseResponse, state, transitions);
+                            finalizeTransition(falseResponse, state, transitions);
                         }
                     }
                 } else {
@@ -78,10 +76,25 @@ public class Iterator {
                 }
                 break;
             case LOOP:
-                createTransition(response, state, transitions);
+                finalizeTransition(response, state, transitions);
+                if (state.getLabel().equals("do")) {
+                    finalizeTransition(iterateLoop(states, transitions), tools.getNextSameLevelState(state, states), transitions);
+                    transitions.add(tools.createTransition("FALSE", tools.getNextSameLevelState(state, states), state));
+                    newResponse.add(tools.createTransition("TRUE", tools.getNextSameLevelState(state, states), null));
+                    state = tools.getNextState(tools.getNextSameLevelState(state, states), states);
+                    break;
+                }
+                if (state.getLabel().equals("while")) {
+                    newResponse.add(tools.createTransition("FALSE", state, null));
+                    newResponse.addAll(iterateLoop(states, transitions));
+                    finalizeTransition(iterateLoop(states, transitions), state, transitions);
+                    state = tools.getNextSameLevelState(state, states);
+                    break;
+                }
                 if (state.getLabel().equals("for")) {
                     newResponse.add(tools.createTransition("FALSE", state, null));
                     newResponse.addAll(iterateLoop(states, transitions));
+                    finalizeTransition(iterateLoop(states, transitions), state, transitions);
                     state = tools.getNextSameLevelState(state, states);
                     break;
                 }
@@ -133,9 +146,9 @@ public class Iterator {
         return (iterator.iterate(trueResponse, states, transitions));
     }
 
-    private void createTransition (List<Transition> response, State state, List<Transition> transitions) {
+    private void finalizeTransition(List<Transition> response, State destiny, List<Transition> transitions) {
         for (Transition transition : response) {
-            transition.setTo(state);
+            transition.setTo(destiny);
             if (!existis(transition, transitions)) {
                 transitions.add(transition);
             }

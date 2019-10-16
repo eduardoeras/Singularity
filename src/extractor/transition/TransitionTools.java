@@ -27,6 +27,17 @@ public class TransitionTools {
         return createTransition("lambda", initial, null);
     }
 
+    public State createFinalState () {
+        State finalState = new State();
+        finalState.setElement(Element.FINAL);
+        finalState.setLabel("final");
+        finalState.setId(-1);
+        finalState.setVisibility(Visibility.NONE);
+        finalState.setType(Type.NONE);
+        finalState.setScopeLevel(-1);
+        return finalState;
+    }
+
     public State getNextState (State state, List<State> states) {
         try {
             return states.get(states.indexOf(state) + 1);
