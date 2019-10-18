@@ -58,6 +58,7 @@ public class TransitionWalker {
             Iterator iterator = new Iterator(destiny, destiny.getScopeLevel());
             response = iterator.iterate(response, states, transitions, functions);
         }
+        tools.finalizeTransition(response, tools.createFinalState(), transitions);
     }
 
 }

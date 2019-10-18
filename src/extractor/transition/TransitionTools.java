@@ -100,4 +100,23 @@ public class TransitionTools {
         return "lambda";
     }
 
+    public void finalizeTransition(List<Transition> response, State destiny, List<Transition> transitions) {
+        for (Transition transition : response) {
+            transition.setTo(destiny);
+            if (!exists(transition, transitions)) {
+                transitions.add(transition);
+            }
+        }
+    }
+
+    //Private Methods
+    private boolean exists(Transition neo, List<Transition> transitions) {
+        for (Transition saved : transitions) {
+            if (neo.isEqual(saved)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
