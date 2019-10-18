@@ -2,6 +2,7 @@ package extractor.transition;
 
 import global.structure.State;
 import global.structure.Transition;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,10 @@ public class Iterator {
     }
 
     //Methods
-    public List<Transition> iterate (List<Transition> response, List<State> states, List<Transition> transitions) {
+    public List<Transition> iterate (List<Transition> response, List<State> states, List<Transition> transitions, List<State> functions) {
         List<Transition> newResponse;
         do {
-            newResponse = (process (response, states, transitions));
+            newResponse = (process (response, states, transitions, functions));
             response = newResponse;
             if (breakFlag) {
                 break;
@@ -34,7 +35,7 @@ public class Iterator {
         return newResponse;
     }
 
-    private List<Transition> process (List<Transition> response, List<State> states, List<Transition> transitions) {
+    private List<Transition> process (List<Transition> response, List<State> states, List<Transition> transitions, List<State> functions) {
         List<Transition> newResponse = new ArrayList<>();
         switch (state.getElement()) {
             case JUMP:
@@ -44,24 +45,27 @@ public class Iterator {
                 }
                 if (state.getLabel().equals("return")) {
                     finalizeTransition(response, state, transitions);
-                    transitions.add(tools.createTransition(extractEvent(state), state, tools.createFinalState()));
+                    finalizeTransition(functionCall(response, states, transitions, functions), state, transitions);
+                    newResponse.add(tools.createTransition(extractReturnEvent(state), state, null));
                     breakFlag = true;
-                    return response;
+                    break;
                 }
             case ATTRIBUTION:
             case STATEMENT:
                 finalizeTransition(response, state, transitions);
+                finalizeTransition(functionCall(response, states, transitions, functions), state, transitions);
                 String event = tools.extractEvent(state.getLine());
                 newResponse.add(tools.createTransition(event, state, null));
                 state = tools.getNextState(state, states);
                 break;
             case DECISION:
                 finalizeTransition(response, state, transitions);
+                finalizeTransition(functionCall(response, states, transitions, functions), state, transitions);
                 if (state.getLabel().equals("if")) {
                     while (true) {
                         List<Transition> falseResponse = new ArrayList<>();
                         falseResponse.add(tools.createTransition("FALSE", state, null));
-                        newResponse.addAll(iterateLoop(states, transitions));
+                        newResponse.addAll(iterateLoop(states, transitions, functions));
                         state = tools.getNextSameLevelState(state, states);
                         if (!state.getLabel().equals("else_if") && !state.getLabel().equals("else")) {
                             newResponse.addAll(falseResponse);
@@ -77,8 +81,9 @@ public class Iterator {
                 break;
             case LOOP:
                 finalizeTransition(response, state, transitions);
+                finalizeTransition(functionCall(response, states, transitions, functions), state, transitions);
                 if (state.getLabel().equals("do")) {
-                    finalizeTransition(iterateLoop(states, transitions), tools.getNextSameLevelState(state, states), transitions);
+                    finalizeTransition(iterateLoop(states, transitions, functions), tools.getNextSameLevelState(state, states), transitions);
                     transitions.add(tools.createTransition("FALSE", tools.getNextSameLevelState(state, states), state));
                     newResponse.add(tools.createTransition("TRUE", tools.getNextSameLevelState(state, states), null));
                     state = tools.getNextState(tools.getNextSameLevelState(state, states), states);
@@ -86,15 +91,15 @@ public class Iterator {
                 }
                 if (state.getLabel().equals("while")) {
                     newResponse.add(tools.createTransition("FALSE", state, null));
-                    newResponse.addAll(iterateLoop(states, transitions));
-                    finalizeTransition(iterateLoop(states, transitions), state, transitions);
+                    newResponse.addAll(iterateLoop(states, transitions, functions));
+                    finalizeTransition(iterateLoop(states, transitions, functions), state, transitions);
                     state = tools.getNextSameLevelState(state, states);
                     break;
                 }
                 if (state.getLabel().equals("for")) {
                     newResponse.add(tools.createTransition("FALSE", state, null));
-                    newResponse.addAll(iterateLoop(states, transitions));
-                    finalizeTransition(iterateLoop(states, transitions), state, transitions);
+                    newResponse.addAll(iterateLoop(states, transitions, functions));
+                    finalizeTransition(iterateLoop(states, transitions, functions), state, transitions);
                     state = tools.getNextSameLevelState(state, states);
                     break;
                 }
@@ -105,7 +110,7 @@ public class Iterator {
                     List<Transition> innerResponse = new ArrayList<>();
                     while (imInside(me)) {
                         while (state.getLabel().equals("case")) {
-                            innerResponse.add(tools.createTransition(extractEvent(state), me, null));
+                            innerResponse.add(tools.createTransition(extractReturnEvent(state), me, null));
                             state = tools.getNextState(state, states);
                         }
                         if (state.getLabel().equals("default")) {
@@ -113,7 +118,7 @@ public class Iterator {
                             state = tools.getNextState(state, states);
                         } else {
                             Iterator iterator = new Iterator(state, me.getScopeLevel());
-                            newResponse.addAll(iterator.iterate(innerResponse, states, transitions));
+                            newResponse.addAll(iterator.iterate(innerResponse, states, transitions, functions));
                             innerResponse.clear();
                             state = tools.getNextSameLevelDecision(state, states);
                         }
@@ -127,11 +132,24 @@ public class Iterator {
         return newResponse;
     }
 
+    private List<Transition> functionCall (List<Transition> response, List<State> states, List<Transition> transitions, List<State> functions) {
+        List<Transition> newResponse = new ArrayList<>();
+        for (ParseTree key : state.getLine().getContent()) {
+            for (State function : functions) {
+                if (function.getLabel().equals(key.getText())) {
+                    Iterator iterator = new Iterator(function, function.getScopeLevel());
+                    newResponse.addAll(iterator.iterate(response, states, transitions, functions));
+                }
+            }
+        }
+        return newResponse;
+    }
+
     private boolean imInside (State me) {
         return state.getScopeLevel() == me.getScopeLevel() + 1;
     }
 
-    private String extractEvent(State state) {
+    private String extractReturnEvent(State state) {
         try {
             return state.getLine().getContent().get(1).getText();
         } catch (Exception e) {
@@ -139,23 +157,23 @@ public class Iterator {
         }
     }
 
-    private List<Transition> iterateLoop (List<State> states, List<Transition> transitions) {
+    private List<Transition> iterateLoop (List<State> states, List<Transition> transitions, List<State> functions) {
         List<Transition> trueResponse = new ArrayList<>();
         trueResponse.add(tools.createTransition("TRUE", state, null));
         Iterator iterator = new Iterator(tools.getNextState(state, states), state.getScopeLevel());
-        return (iterator.iterate(trueResponse, states, transitions));
+        return (iterator.iterate(trueResponse, states, transitions, functions));
     }
 
     private void finalizeTransition(List<Transition> response, State destiny, List<Transition> transitions) {
         for (Transition transition : response) {
             transition.setTo(destiny);
-            if (!existis(transition, transitions)) {
+            if (!exists(transition, transitions)) {
                 transitions.add(transition);
             }
         }
     }
 
-    private boolean existis(Transition neo, List<Transition> transitions) {
+    private boolean exists(Transition neo, List<Transition> transitions) {
         for (Transition saved : transitions) {
             if (neo.isEqual(saved)) {
                 return true;
