@@ -29,4 +29,7 @@ public class Line {
         return endLineCharacter;
     }
 
+    public boolean isEqual(Line line) {
+        return line.getEndLineCharacter().equals(this.endLineCharacter) && line.getContent().equals(this.content);
+    }
 }

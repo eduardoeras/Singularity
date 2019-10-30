@@ -24,6 +24,7 @@ public class TransitionTools {
         initial.setVisibility(Visibility.NONE);
         initial.setType(Type.NONE);
         initial.setScopeLevel(-1);
+        initial.setLine(new Line());
         return createTransition("lambda", initial, null);
     }
 
@@ -35,6 +36,7 @@ public class TransitionTools {
         finalState.setVisibility(Visibility.NONE);
         finalState.setType(Type.NONE);
         finalState.setScopeLevel(-1);
+        finalState.setLine(new Line());
         return finalState;
     }
 

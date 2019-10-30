@@ -78,6 +78,9 @@ public class StateWalker {
                         newLevel.setId(IdGenerator.getIntegerId());
                     }
                 }
+                if (newLevel.getLabel().equals("catch")) {
+                    newLevel.setId(IdGenerator.getIntegerId());
+                }
                 states.add(newLevel);
                 scopeLevel++;
                 break;

@@ -80,10 +80,51 @@ public:
         std::cout << "after" << std::endl;
 
         switch (input) {
-        }*/
+        }
 
         std::cout << "Before" << std::endl;
         input = input + anotherFunction;
+        std::cout << "after" << std::endl;
+
+        std::cout << "aftermath" << std::endl;
+
+        std::cout << "Before" << std::endl;
+        try
+        {
+            std::cout << "Inside Try" << std::endl;
+            if (true)
+            {
+                std::cout << "Inside" << std::endl;
+            }
+        }
+        catch(Exception e)
+        {
+            std::cout << "Inside Catch" << std::endl;
+        }
+        catch(Exception e)
+        {
+            std::cout << "Inside Catch" << std::endl;
+        }
+        catch(Exception e)
+        {
+            std::cout << "Inside Catch" << std::endl;
+        }
+        catch(Exception e)
+        {
+            std::cout << "Inside Catch" << std::endl;
+        }
+        std::cout << "after" << std::endl;*/
+
+        std::cout << "Before" << std::endl;
+        while (true)
+        {
+            std::cout << "Before" << std::endl;
+            if (true)
+            {
+                break;
+            }
+            std::cout << "after" << std::endl;
+        }
         std::cout << "after" << std::endl;
 
         std::cout << "aftermath" << std::endl;
