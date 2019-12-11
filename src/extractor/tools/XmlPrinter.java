@@ -1,33 +1,22 @@
 package extractor.tools;
 
-import global.structure.State;
-import global.structure.Element;
-import global.structure.Type;
-import global.structure.Visibility;
+import global.structure.*;
+import global.tools.FileName;
 
 import java.io.PrintWriter;
 import java.util.List;
 
-public class StatePrinter {
+public class XmlPrinter {
     //Attrbutes
-    private String fileName;
-    private static StatePrinter uniqueInstance;
+    private FileName fileName;
 
     //Constructor
-    private StatePrinter () {
-        fileName = "";
-    }
-
-    //Static Methods
-    public static StatePrinter getInstance() {
-        if (uniqueInstance == null) {
-            uniqueInstance = new StatePrinter();
-        }
-        return uniqueInstance;
+    public XmlPrinter() {
+        fileName = FileName.getInstance();
     }
 
     //Public Methods
-    public void print (List<State> states) {
+    public void print (List<State> states, List<Transition> transitions, boolean debug) {
         String output = "";
         for (State state : states) {
             String line = "";
@@ -64,22 +53,27 @@ public class StatePrinter {
             line = line.concat("'>");
             output = output.concat(line + "\n");
         }
+        output = output.concat("\n");
+        for (Transition transition : transitions) {
+            output = output.concat("<transition from = '");
+            output = output.concat(transition.getFrom().getLabel() + "_" + transition.getFrom().getId());
+            output = output.concat("' to = '");
+            output = output.concat(transition.getTo().getLabel() + "_" + transition.getTo().getId());
+            output = output.concat("' event = '");
+            output = output.concat(transition.getEvent().getEvent());
+            output = output.concat("'>\n");
+        }
 
-        System.out.print(output);
+        if (debug) {
+            System.out.print(output);
+        }
+
         try {
-            PrintWriter printWriter = new PrintWriter(fileName + ".xml");
+            PrintWriter printWriter = new PrintWriter(fileName.getFileName() + ".xml");
             printWriter.print(output);
             printWriter.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void setFileName (String fileName) {
-        this.fileName = fileName;
-    }
-
-    public void reset () {
-        fileName = "";
     }
 }

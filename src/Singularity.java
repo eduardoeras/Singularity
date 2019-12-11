@@ -1,5 +1,5 @@
-import extractor.tools.StatePrinter;
 import global.exception.ReaderException;
+import global.tools.FileName;
 import global.tools.Reset;
 import reader.Reader;
 import constructor.Constructor;
@@ -12,7 +12,7 @@ public class Singularity {
     private Extractor extractor;
     private Constructor constructor;
     private Generator generator;
-    private StatePrinter statePrinter;
+    private FileName fileName;
     private Reset reset;
 
     //Constructor
@@ -21,16 +21,17 @@ public class Singularity {
         extractor = new Extractor();
         constructor = new Constructor();
         generator = new Generator();
-        statePrinter = StatePrinter.getInstance();
+        fileName = FileName.getInstance();
         reset = new Reset();
     }
 
     //Methods
-    public void run (String input) {
-        statePrinter.setFileName(input);
+    public void run (String input, boolean debug) {
+        fileName.setFileName(input);
         try {
-            extractor.extract(reader.read(input));
-        }catch (ReaderException exception) {
+            extractor.extract(reader.read(input), debug);
+            generator.generate(extractor.getStates(), extractor.getTransitions());
+        } catch (ReaderException exception) {
             exception.printStackTrace();
         }
         reset.masterReset();

@@ -74,7 +74,9 @@ public class StateWalker {
                     newLevel.setVisibility(Visibility.NONE);
                 }
                 if (newLevel.getElement() == Element.DECISION || newLevel.getElement() == Element.LOOP) {
-                    if (!newLevel.getLabel().equals("do") && !newLevel.getLabel().equals("switch") && !newLevel.getLabel().equals("else")) {
+                    if (!newLevel.getLabel().equals("do") && !newLevel.getLabel().equals("switch")) {
+                        newLevel.setId(IdGenerator.getIntegerId());
+                    } else if (newLevel.getLabel().equals("else")) {
                         newLevel.setId(IdGenerator.getIntegerId());
                     }
                 }

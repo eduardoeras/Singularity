@@ -127,14 +127,14 @@ public class Iterator {
                 }
                 if (state.getLabel().equals("while")) {
                     outsideResponse.add(tools.createTransition("FALSE", state, null));
-                    outsideResponse.addAll(iterateLoop(states, transitions, functions));
+                    //outsideResponse.addAll(iterateLoop(states, transitions, functions));
                     tools.finalizeTransition(iterateLoop(states, transitions, functions), state, transitions);
                     state = tools.getNextSameLevelState(state, states);
                     break;
                 }
                 if (state.getLabel().equals("for")) {
                     outsideResponse.add(tools.createTransition("FALSE", state, null));
-                    outsideResponse.addAll(iterateLoop(states, transitions, functions));
+                    //outsideResponse.addAll(iterateLoop(states, transitions, functions));
                     tools.finalizeTransition(iterateLoop(states, transitions, functions), state, transitions);
                     state = tools.getNextSameLevelState(state, states);
                     break;

@@ -4,7 +4,7 @@ class Class {
 public:
     int function(int input)
     {
-        /*std::cout << "Before" << std::endl;
+        std::cout << "Before" << std::endl;
         while (1 > input)
         {
             input ++;
@@ -113,7 +113,7 @@ public:
         {
             std::cout << "Inside Catch" << std::endl;
         }
-        std::cout << "after" << std::endl;*/
+        std::cout << "after" << std::endl;
 
         std::cout << "Before" << std::endl;
         while (true)
