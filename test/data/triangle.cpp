@@ -24,7 +24,7 @@ public:
             }
             else
             {
-                return "Isoceles";
+                return "Isosceles";
             }
         }
         else

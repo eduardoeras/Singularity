@@ -1,5 +1,7 @@
 package generator;
 
+import generator.elements.Initials;
+import generator.elements.Nexts;
 import generator.elements.Variables;
 import global.structure.State;
 import global.structure.Transition;
@@ -12,11 +14,15 @@ public class Generator {
     //Attributes
     private FileName fileName;
     private Variables variables;
+    private Initials initials;
+    private Nexts nexts;
 
     //Constructor
     public Generator () {
         fileName = FileName.getInstance();
         variables = new Variables();
+        initials = new Initials();
+        nexts = new Nexts();
     }
 
     //Public Methods
@@ -29,7 +35,7 @@ public class Generator {
                 "    VAR\n" +
                 "        state : \n" +
                 "        {\n");
-        output = output.concat(variables.getStates(states));
+        output = output.concat(variables.getStates(states, transitions));
         output = output.concat(
                 "        };\n" +
                 "\n" +
@@ -43,27 +49,27 @@ public class Generator {
         output = output.concat(
                 "\n" +
                 "    ASSIGN\n" +
-                "\n" +
-                "        init(state) := ;\n" +
-                "\n" +
+                "\n");
+        output = output.concat(initials.generateInitials(transitions));
+        output = output.concat("\n" +
                 "        next(state) :=\n" +
-                "            case\n" +
-                "                \n" +
-                "                TRUE : state;\n" +
+                "            case\n");
+        output = output.concat(nexts.getNextState(transitions));
+        output = output.concat("                TRUE : state;\n" +
                 "            esac;\n" +
                 "\n" +
                 "        next(events) :=\n" +
-                "            case\n" +
-                "                \n" +
-                "                TRUE : events;\n" +
+                "            case\n");
+        output = output.concat(nexts.getNextEvents(transitions));
+        output = output.concat("                TRUE : events;\n" +
                 "            esac;");
         if (existsBoolean) {
             output = output.concat(
                     "\n\n" +
                     "        next(decision) :=\n" +
-                    "            case\n" +
-                    "                \n" +
-                    "                TRUE : {TRUE, FALSE};\n" +
+                    "            case\n");
+            output = output.concat(nexts.getNextBoolean(transitions));
+            output = output.concat("                TRUE : {TRUE, FALSE};\n" +
                     "            esac;");
         }
         try {

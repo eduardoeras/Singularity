@@ -14,6 +14,7 @@ public:
         if (var == 1)
         {
             std::cout << "content_if" << std::endl;
+            return true;
         }
         else if (var = 2)
         {
@@ -54,6 +55,7 @@ public:
             break;
         case 1 :
             std::cout << "content_case_1_switch" << std::endl;
+            return false;
             break;
         default :
             std::cout << "content_default" << std::endl;

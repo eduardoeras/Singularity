@@ -3,15 +3,17 @@ package generator.elements;
 import global.structure.State;
 import global.structure.Transition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Variables {
 
     //Methods
-    public String getStates(List<State> states) {
+    public String getStates(List<State> states, List<Transition> transitions) {
         String output = "";
+        List<State> activeStates = colectActiveStates(transitions);
         for (State state : states) {
-            if (state.getId() != -1) {
+            if (state.getId() != -1 && activeStates.contains(state)) {
                 output = output.concat("            " + state.getLabel() + "_" + state.getId() + ",\n");
             }
         }
@@ -37,5 +39,19 @@ public class Variables {
             }
         }
         return false;
+    }
+
+    //Private Methods
+    private List<State> colectActiveStates(List<Transition> transitions) {
+        List<State> activeStates = new ArrayList<>();
+        for (Transition transition : transitions) {
+            if (!activeStates.contains(transition.getFrom())) {
+                activeStates.add(transition.getFrom());
+            }
+            if (!activeStates.contains(transition.getTo())) {
+                activeStates.add(transition.getTo());
+            }
+        }
+        return activeStates;
     }
 }
