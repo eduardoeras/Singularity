@@ -2,6 +2,7 @@ package generator;
 
 import generator.elements.Initials;
 import generator.elements.Nexts;
+import generator.elements.Properties;
 import generator.elements.Variables;
 import global.structure.State;
 import global.structure.Transition;
@@ -16,6 +17,7 @@ public class Generator {
     private Variables variables;
     private Initials initials;
     private Nexts nexts;
+    private Properties properties;
 
     //Constructor
     public Generator () {
@@ -23,6 +25,7 @@ public class Generator {
         variables = new Variables();
         initials = new Initials();
         nexts = new Nexts();
+        properties = new Properties();
     }
 
     //Public Methods
@@ -70,8 +73,10 @@ public class Generator {
                     "            case\n");
             output = output.concat(nexts.getNextBoolean(transitions));
             output = output.concat("                TRUE : {TRUE, FALSE};\n" +
-                    "            esac;");
+                    "            esac;\n");
         }
+        output = output.concat("\n");
+        output = output.concat(properties.generateProperties(states, transitions));
         try {
             PrintWriter printWriter = new PrintWriter(fileName.getFileName() + ".smv");
             printWriter.print(output);

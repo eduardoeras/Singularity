@@ -31,6 +31,7 @@ public class Singularity {
         try {
             extractor.extract(reader.read(input), debug);
             generator.generate(extractor.getStates(), extractor.getTransitions());
+            constructor.build();
         } catch (ReaderException exception) {
             exception.printStackTrace();
         }
