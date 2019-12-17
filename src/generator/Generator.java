@@ -29,7 +29,7 @@ public class Generator {
     }
 
     //Public Methods
-    public void generate (List<State> states, List<Transition> transitions) {
+    public List<State> generate (List<State> states, List<Transition> transitions) {
         boolean existsBoolean = variables.existitsBoolean(transitions);
         String output = "";
         output = output.concat(
@@ -84,5 +84,6 @@ public class Generator {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return states;
     }
 }

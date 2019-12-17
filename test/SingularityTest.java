@@ -14,25 +14,25 @@ public class SingularityTest {
     //Methods
     @Test
     public void controlTests () {
-        System.out.println("\n          MINIMAL\n");
-        singularity.run("test/data/minimal.cpp", false);
-        System.out.println("\n          ALLCONDITIONS\n");
-        singularity.run("test/data/allConditions.cpp", false);
-        System.out.println("\n          TRIANGLE\n");
-        singularity.run("test/data/triangle.cpp", false);
-        System.out.println("\n          POLYMORPHICPOINTERS\n");
-        singularity.run("test/data/polymorphic_pointers.cpp", false);
+        //System.out.println("\n          MINIMAL\n");
+        //singularity.run("test/data/minimal.cpp", false);
+        //System.out.println("\n          ALLCONDITIONS\n");
+        //singularity.run("test/data/allConditions.cpp", false);
+        //System.out.println("\n          TRIANGLE\n");
+        //singularity.run("test/data/triangle.cpp", false);
+        //System.out.println("\n          POLYMORPHICPOINTERS\n");
+        //singularity.run("test/data/polymorphic_pointers.cpp", false);
     }
-    //@Test
+    @Test
     public void geoDmaBasics () {
         System.out.println("\n          CONTEXT\n");
-        singularity.run("test/data/context.cpp", true);
+        singularity.run("test/data/context.cpp", false);
         System.out.println("\n          GENERALFUNCTIONS\n");
-        singularity.run("test/data/generalFunctions.cpp", true);
+        singularity.run("test/data/generalFunctions.cpp", false);
         System.out.println("\n          INTERSECTIONCACHE\n");
-        singularity.run("test/data/intersectionCache.cpp", true);
+        singularity.run("test/data/intersectionCache.cpp", false);
         System.out.println("\n          MULTIGEOMETRYALGORITHMS\n");
-        singularity.run("test/data/multiGeometryAlgorithms.cpp", true);
+        singularity.run("test/data/multiGeometryAlgorithms.cpp", false);
     }
 
     //@Test

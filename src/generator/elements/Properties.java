@@ -61,6 +61,6 @@ public class Properties {
     }
 
     private boolean notTrivial(Event event) {
-        return !event.getEvent().equals("TRUE") && !event.getEvent().equals("FALSE") && !event.getEvent().equals("lambda");
+        return !event.getEvent().equals("TRUE") && !event.getEvent().equals("FALSE") && !event.getEvent().equals("lambda") && !event.getEvent().equals("");
     }
 }

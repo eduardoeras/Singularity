@@ -30,8 +30,7 @@ public class Singularity {
         fileName.setFileName(input);
         try {
             extractor.extract(reader.read(input), debug);
-            generator.generate(extractor.getStates(), extractor.getTransitions());
-            constructor.build();
+            constructor.build(generator.generate(extractor.getStates(), extractor.getTransitions()));
         } catch (ReaderException exception) {
             exception.printStackTrace();
         }

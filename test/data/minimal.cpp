@@ -4,7 +4,7 @@ class Class {
 public:
     int function(int input)
     {
-        /*std::cout << "Before" << std::endl;
+        std::cout << "Before" << std::endl;
         while (1 > input)
         {
             input ++;
@@ -12,7 +12,8 @@ public:
         }
         std::cout << "after" << std::endl;
 
-        std::cout << "Before" << std::endl;
+
+        /*std::cout << "Before" << std::endl;
         do
         {
             input --;
@@ -80,12 +81,12 @@ public:
         std::cout << "after" << std::endl;
 
         switch (input) {
-        }*/
+
 
         std::cout << "Before" << std::endl;
         input = input + anotherFunction;
         std::cout << "after" << std::endl;
-/*
+
         std::cout << "aftermath" << std::endl;
 
         std::cout << "Before" << std::endl;
@@ -124,8 +125,8 @@ public:
                 break;
             }
             std::cout << "after" << std::endl;
-        }*/
-        std::cout << "after" << std::endl;
+        }
+        std::cout << "after" << std::endl;*/
 
         std::cout << "aftermath" << std::endl;
 

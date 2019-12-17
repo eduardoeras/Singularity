@@ -1,5 +1,6 @@
 package generator.elements;
 
+import global.structure.Event;
 import global.structure.State;
 import global.structure.Transition;
 
@@ -17,18 +18,30 @@ public class Variables {
                 output = output.concat("            " + state.getLabel() + "_" + state.getId() + ",\n");
             }
         }
+        output = output.substring(0, output.length() - 2) + "\n";
         return output;
     }
 
     public String getEvents(List<Transition> transitions) {
-        String output = "";
+        List<String> events = new ArrayList<>();
+        String output = "            null,\n";
+        boolean valid = false;
         for (Transition transition : transitions) {
             if(!transition.getEvent().getEvent().equals("TRUE") &&
                     !transition.getEvent().getEvent().equals("FALSE") &&
                     !transition.getEvent().getEvent().equals("lambda")) {
-                output = output.concat("            " + transition.getEvent().getEvent() + ",\n");
+                if (!events.contains(transition.getEvent().getEvent()) && !transition.getEvent().getEvent().equals("")) {
+                    events.add(transition.getEvent().getEvent());
+                    valid = true;
+                    output = output.concat("            " + transition.getEvent().getEvent());
+                }
+            }
+            if (valid) {
+                output = output.concat(",\n");
+                valid = false;
             }
         }
+        output = output.substring(0, output.length() - 2) + "\n";
         return output;
     }
 

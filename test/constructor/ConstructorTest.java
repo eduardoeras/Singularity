@@ -16,7 +16,7 @@ public class ConstructorTest {
     //Methods
     @Test
     public void testConstructor () {
-        constructor.build();
+
     }
 
 }
