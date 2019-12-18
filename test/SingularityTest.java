@@ -14,14 +14,14 @@ public class SingularityTest {
     //Methods
     @Test
     public void controlTests () {
-        //System.out.println("\n          MINIMAL\n");
-        //singularity.run("test/data/minimal.cpp", false);
-        //System.out.println("\n          ALLCONDITIONS\n");
-        //singularity.run("test/data/allConditions.cpp", false);
-        //System.out.println("\n          TRIANGLE\n");
-        //singularity.run("test/data/triangle.cpp", false);
-        //System.out.println("\n          POLYMORPHICPOINTERS\n");
-        //singularity.run("test/data/polymorphic_pointers.cpp", false);
+        System.out.println("\n          MINIMAL\n");
+        singularity.run("test/data/minimal.cpp", false);
+        System.out.println("\n          ALLCONDITIONS\n");
+        singularity.run("test/data/allConditions.cpp", false);
+        System.out.println("\n          TRIANGLE\n");
+        singularity.run("test/data/triangle.cpp", false);
+        System.out.println("\n          POLYMORPHICPOINTERS\n");
+        singularity.run("test/data/polymorphic_pointers.cpp", false);
     }
     @Test
     public void geoDmaBasics () {

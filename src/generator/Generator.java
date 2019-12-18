@@ -30,7 +30,7 @@ public class Generator {
 
     //Public Methods
     public List<State> generate (List<State> states, List<Transition> transitions) {
-        boolean existsBoolean = variables.existitsBoolean(transitions);
+        boolean existsBoolean = variables.existsBoolean(transitions);
         String output = "";
         output = output.concat(
                 "MODULE main\n" +
@@ -40,12 +40,14 @@ public class Generator {
                 "        {\n");
         output = output.concat(variables.getStates(states, transitions));
         output = output.concat(
-                "        };\n" +
-                "\n" +
-                "        events :\n" +
-                "        {\n");
-        output = output.concat(variables.getEvents(transitions));
-        output = output.concat("        };\n");
+                "        };\n");
+        if (variables.existsEvent(transitions)) {
+            output = output.concat("\n" +
+                    "        events :\n" +
+                    "        {\n");
+            output = output.concat(variables.getEvents(transitions));
+            output = output.concat("        };\n");
+        }
         if (existsBoolean) {
             output = output.concat("\n        decision : boolean;\n");
         }
@@ -59,13 +61,15 @@ public class Generator {
                 "            case\n");
         output = output.concat(nexts.getNextState(transitions));
         output = output.concat("                TRUE : state;\n" +
-                "            esac;\n" +
-                "\n" +
-                "        next(events) :=\n" +
-                "            case\n");
-        output = output.concat(nexts.getNextEvents(transitions));
-        output = output.concat("                TRUE : events;\n" +
-                "            esac;");
+                "            esac;\n");
+        if (variables.existsEvent(transitions)) {
+            output = output.concat("\n" +
+                    "        next(events) :=\n" +
+                    "            case\n");
+            output = output.concat(nexts.getNextEvents(transitions));
+            output = output.concat("                TRUE : events;\n" +
+                    "            esac;");
+        }
         if (existsBoolean) {
             output = output.concat(
                     "\n\n" +

@@ -45,9 +45,18 @@ public class Variables {
         return output;
     }
 
-    public boolean existitsBoolean(List<Transition> transitions) {
+    public boolean existsBoolean (List<Transition> transitions) {
         for (Transition transition : transitions) {
             if (transition.getEvent().getEvent().equals("TRUE") || transition.getEvent().getEvent().equals("FALSE")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean existsEvent (List<Transition> transitions) {
+        for (Transition transition : transitions) {
+            if (!transition.getEvent().getEvent().equals("TRUE") && !transition.getEvent().getEvent().equals("FALSE") && notTrivial(transition.getEvent())) {
                 return true;
             }
         }
@@ -66,5 +75,9 @@ public class Variables {
             }
         }
         return activeStates;
+    }
+
+    private boolean notTrivial(Event event) {
+        return !event.getEvent().equals("TRUE") && !event.getEvent().equals("FALSE") && !event.getEvent().equals("lambda") && !event.getEvent().equals("");
     }
 }

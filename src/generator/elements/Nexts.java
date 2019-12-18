@@ -20,7 +20,9 @@ public class Nexts {
                 switch (transition.getFrom().getElement()) {
                     case DECISION:
                     case LOOP:
-                        output = output.concat("                (state = " + from + " & decision = " + event + ") : " + to + ";\n");
+                        if (event.equals("TRUE") || event.equals("FALSE")) {
+                            output = output.concat("                (state = " + from + " & decision = " + event + ") : " + to + ";\n");
+                        }
                         break;
                     default:
                         output = output.concat("                (state = " + from + ") : " + to + ";\n");

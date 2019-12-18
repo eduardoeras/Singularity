@@ -21,7 +21,9 @@ public class Filter {
                 if (line.length() >= 16 && line.substring(0,16).equals("-- specification")) {
                     flag = false;
                     if (counterexample.size() > 2) {
-                        counterexamples.add(counterexample);
+                        List<Step> ctrxpl = new ArrayList<>();
+                        ctrxpl.addAll(counterexample);
+                        counterexamples.add(ctrxpl);
                     }
                     counterexample.clear();
                     continue;

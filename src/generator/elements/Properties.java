@@ -4,6 +4,7 @@ import global.structure.Event;
 import global.structure.State;
 import global.structure.Transition;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Properties {
@@ -22,8 +23,10 @@ public class Properties {
     //Private Methods
     private String caseOne(List<Transition> transitions) {
         String output = "";
+        List<String> events = new ArrayList<>();
         for (Transition transition : transitions) {
-            if (notTrivial(transition.getEvent())) {
+            if (notTrivial(transition.getEvent()) && !events.contains(transition.getEvent().getEvent())) {
+                events.add(transition.getEvent().getEvent());
                 output = output.concat("CTLSPEC\n   AG (events != " + transition.getEvent().getEvent() + ")\n");
             }
         }
@@ -37,6 +40,9 @@ public class Properties {
                 String from = transition.getFrom().getLabel() + "_" + transition.getFrom().getId();
                 String to = transition.getTo().getLabel() + "_" + transition.getTo().getId();
                 String event = transition.getEvent().getEvent();
+                if (!event.equals("TRUE") && !event.equals("FALSE")) {
+                    continue;
+                }
                 switch (transition.getFrom().getElement()) {
                     case DECISION:
                     case LOOP:

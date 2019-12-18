@@ -5,13 +5,28 @@ import global.structure.Transition;
 import java.util.List;
 
 public class Initials {
+    //Attributes
+    private Variables variables;
+
+    //Constructor
+    public Initials () {
+        variables = new Variables();
+    }
 
     //Methods
     public String generateInitials(List<Transition> transitions) {
-        String output = "        init(events) := null;\n";
+        String output = "";
+        if (variables.existsEvent(transitions)) {
+            output = "        init(events) := null;\n";
+        }
         output = output.concat("        init(state) := ");
-        output = output.concat(transitions.get(0).getTo().getLabel() + "_");
-        output = output.concat(transitions.get(0).getTo().getId() + ";\n");
+        for (Transition transition : transitions) {
+            if (transition.getTo().getId() != -1) {
+                output = output.concat(transition.getTo().getLabel() + "_");
+                output = output.concat(transition.getTo().getId() + ";\n");
+                break;
+            }
+        }
         return output;
     }
 }
