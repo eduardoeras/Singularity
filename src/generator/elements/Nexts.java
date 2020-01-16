@@ -3,11 +3,18 @@ package generator.elements;
 import global.structure.Element;
 import global.structure.Event;
 import global.structure.Transition;
+import global.tools.Statistics;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Nexts {
+    //Attributes
+    private Statistics statistics;
+
+    public Nexts() {
+        statistics = Statistics.getInstance();
+    }
 
     //Methods
     public String getNextState(List<Transition> transitions) {
@@ -22,10 +29,12 @@ public class Nexts {
                     case LOOP:
                         if (event.equals("TRUE") || event.equals("FALSE")) {
                             output = output.concat("                (state = " + from + " & decision = " + event + ") : " + to + ";\n");
+                            statistics.addTransition();
                         }
                         break;
                     default:
                         output = output.concat("                (state = " + from + ") : " + to + ";\n");
+                        statistics.addTransition();
                 }
             }
         }
@@ -60,6 +69,7 @@ public class Nexts {
         }
         for (String line : lines) {
             output = output.concat(line);
+            statistics.addTransition();
         }
         return output;
     }
@@ -92,6 +102,7 @@ public class Nexts {
         }
         for (String line : lines) {
             output = output.concat(line);
+            statistics.addTransition();
         }
         return output;
     }

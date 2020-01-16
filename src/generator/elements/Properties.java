@@ -3,11 +3,19 @@ package generator.elements;
 import global.structure.Event;
 import global.structure.State;
 import global.structure.Transition;
+import global.tools.Statistics;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Properties {
+    //Attributes
+    private Statistics statistics;
+
+    //Constructor
+    public Properties () {
+        statistics = Statistics.getInstance();
+    }
 
     //Methods
     public String generateProperties(List<State> states, List<Transition> transitions) {
@@ -28,6 +36,8 @@ public class Properties {
             if (notTrivial(transition.getEvent()) && !events.contains(transition.getEvent().getEvent())) {
                 events.add(transition.getEvent().getEvent());
                 output = output.concat("CTLSPEC\n   AG (events != " + transition.getEvent().getEvent() + ")\n");
+                statistics.addProperty();
+                statistics.addPropertyCaseOne();
             }
         }
         return output;
@@ -47,6 +57,8 @@ public class Properties {
                     case DECISION:
                     case LOOP:
                         output = output.concat("CTLSPEC\n    AG (state = " + from + " & decision = " + event + " -> EX state != " + to + ")\n");
+                        statistics.addProperty();
+                        statistics.addPropertyCaseTwo();
                         break;
                 }
             }
@@ -61,6 +73,10 @@ public class Properties {
                 String from = transition.getFrom().getLabel() + "_" + transition.getFrom().getId();
                 String to = transition.getTo().getLabel() + "_" + transition.getTo().getId();
                 output = output.concat("CTLSPEC\n    AG (state = " + from + " -> EX state != " + to + ")\nCTLSPEC\n   AG (state != " + from + " -> EX state = " + to + ")\n");
+                statistics.addProperty();
+                statistics.addProperty();
+                statistics.addPropertyCaseThree();
+                statistics.addPropertyCaseThree();
             }
         }
         return output;

@@ -3,19 +3,28 @@ package generator.elements;
 import global.structure.Event;
 import global.structure.State;
 import global.structure.Transition;
+import global.tools.Statistics;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Variables {
+    //Attributes
+    private Statistics statistics;
+
+    //Constructor
+    public Variables () {
+        statistics = Statistics.getInstance();
+    }
 
     //Methods
     public String getStates(List<State> states, List<Transition> transitions) {
         String output = "";
-        List<State> activeStates = colectActiveStates(transitions);
+        List<State> activeStates = collectActiveStates(transitions);
         for (State state : states) {
             if (state.getId() != -1 && activeStates.contains(state)) {
                 output = output.concat("            " + state.getLabel() + "_" + state.getId() + ",\n");
+                statistics.addState();
             }
         }
         output = output.substring(0, output.length() - 2) + "\n";
@@ -34,6 +43,7 @@ public class Variables {
                     events.add(transition.getEvent().getEvent());
                     valid = true;
                     output = output.concat("            " + transition.getEvent().getEvent());
+                    statistics.addEvent();
                 }
             }
             if (valid) {
@@ -48,6 +58,7 @@ public class Variables {
     public boolean existsBoolean (List<Transition> transitions) {
         for (Transition transition : transitions) {
             if (transition.getEvent().getEvent().equals("TRUE") || transition.getEvent().getEvent().equals("FALSE")) {
+                statistics.setDecision();
                 return true;
             }
         }
@@ -64,7 +75,7 @@ public class Variables {
     }
 
     //Private Methods
-    private List<State> colectActiveStates(List<Transition> transitions) {
+    private List<State> collectActiveStates(List<Transition> transitions) {
         List<State> activeStates = new ArrayList<>();
         for (Transition transition : transitions) {
             if (!activeStates.contains(transition.getFrom())) {

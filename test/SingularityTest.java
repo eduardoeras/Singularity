@@ -12,7 +12,7 @@ public class SingularityTest {
     }
 
     //Methods
-    //@Test
+    @Test
     public void controlTests () {
         System.out.println("\n          MINIMAL\n");
         singularity.run("test/data/minimal.cpp", false);
@@ -22,7 +22,7 @@ public class SingularityTest {
         singularity.run("test/data/triangle.cpp", false);
     }
 
-    @Test
+    //@Test
     public void geoDmaSelection () {
         System.out.println("\n          ANALYSIS\n");
         singularity.run("test/GeoDMA_Selection/analysis.cpp", false);
