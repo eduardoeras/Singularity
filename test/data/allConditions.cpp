@@ -9,14 +9,14 @@ public:
         std::cout << "Empty Constructor" << std::endl;
     }
 
-    int function (int var)
+    int function (int input_variable)
     {
-        if (var == 1)
+        if (input_variable == 1)
         {
             std::cout << "content_if" << std::endl;
             return true;
         }
-        else if (var = 2)
+        else if (input_variable = 2)
         {
             std::cout << "content_else_if" << std::endl;
         }
@@ -26,7 +26,7 @@ public:
         }
 
 
-        for (int i=0; i < 2; i++)
+        for (int i = 0; i < 2; i++)
         {
             std::cout << "content_for" << std::endl;
         }
@@ -36,7 +36,7 @@ public:
             std::cout << "content_enhanced_for" << std::endl;
         }
 
-        while (var == 2)
+        while (input_variable == 2)
         {
             std::cout << "content_while" << std::endl;
             continue;
@@ -47,14 +47,15 @@ public:
             std::cout << "content_do_1" << std::endl;
             std::cout << "content_do_2" << std::endl;
             std::cout << "content_do_3" << std::endl;
-        } while (var == 3);
+            input_variable ++;
+        } while (input_variable < 3);
 
-        switch(var) {
-        case 0 :
-            std::cout << "content_case_0_switch" << std::endl;
-            break;
+        switch(input_variable) {
         case 1 :
-            std::cout << "content_case_1_switch" << std::endl;
+            std::cout << "content_switch_case_1" << std::endl;
+            break;
+        case 2 :
+            std::cout << "content_switch_case_2" << std::endl;
             return false;
             break;
         default :
@@ -74,12 +75,12 @@ struct Structure {
     Structure () {
         std::cout << "Empty Structure Constructor" << std::endl;
     }
-    int structFunction ()
+    int structFunction (bool function_input)
     {
         if (true) {
-            std::cout << "Struct If Content" << std::endl;
+            std::cout << "Struct function If Content" << std::endl;
         }
-        if ((true)) return 0;
+        if ((function_input)) return 0;
         return 1;
     }
 };

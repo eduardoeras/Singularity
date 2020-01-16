@@ -5,6 +5,7 @@ import global.tools.FileName;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,18 +43,29 @@ public class Constructor {
     }
 
     private void print (List<List<Step>> counterexamples) {
+        String output = "";
+
         for (List<Step> counterexample : counterexamples) {
             int line = 1;
-            System.out.println("----------------------");
+            output = output.concat("----------------------\n");
             for (Step step : counterexample) {
-                System.out.println(line);
+                output = output.concat(line + "\n");
                 line ++;
                 if (step.getState() != null)
-                    System.out.println("STATE = " + step.getState().getLabel());
+                    output = output.concat("STATE = " + step.getState().getLabel() + "\n");
                 if (step.getEvent() != null)
-                    System.out.println("EVENT = " + step.getEvent());
-                System.out.println("DECISION = " + step.getDecision());
+                    output = output.concat("EVENT = " + step.getEvent() + "\n");
+                output = output.concat("DECISION = " + step.getDecision() + "\n");
             }
+        }
+
+        try {
+            PrintWriter printWriter = new PrintWriter(fileName.getFileName() + ".counterexample");
+            printWriter.print(output);
+            printWriter.close();
+            System.out.println("OK");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

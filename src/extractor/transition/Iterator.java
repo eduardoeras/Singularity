@@ -37,6 +37,12 @@ public class Iterator {
 
     //Methods
     public List<Transition> iterate (List<Transition> response, List<State> states, List<Transition> transitions, List<State> functions) {
+        //DEBUG
+        /*for (ParseTree element : state.getLine().getContent()) {
+            System.out.print(element.getText());
+        }
+        System.out.println();*/
+
         List<Transition> newResponse;
         do {
             newResponse = (process (response, states, transitions, functions));
@@ -194,12 +200,18 @@ public class Iterator {
 
     private List<Transition> functionCall (List<Transition> response, List<State> states, List<Transition> transitions, List<State> functions) {
         List<Transition> newResponse = new ArrayList<>();
+        boolean external = false;
         for (ParseTree key : state.getLine().getContent()) {
             for (State function : functions) {
-                if (function.getLabel().equals(key.getText())) {
+                if (function.getLabel().equals(key.getText()) && !external) {
                     Iterator iterator = new Iterator(function, function.getScopeLevel());
                     newResponse.addAll(iterator.iterate(response, states, transitions, functions));
                 }
+            }
+            if (key.getText().equals(".") || key.getText().equals("->") || key.getText().equals("::")) {
+                external = true;
+            } else {
+                external = false;
             }
         }
         return newResponse;
@@ -212,9 +224,14 @@ public class Iterator {
     private String extractReturnEvent(State state) {
         try {
             if (stringTools.noSpecialCharacters(state.getLine().getContent().get(1).getText()).equals("")) {
-                return state.getLine().getContent().get(2).getText();
+                for (ParseTree element : state.getLine().getContent()) {
+                    if (!stringTools.noSpecialCharacters(element.getText()).isEmpty()) {
+                        return stringTools.noSpecialCharacters(element.getText());
+                    }
+                }
+                return "lambda";
             }
-            return state.getLine().getContent().get(1).getText();
+            return stringTools.noSpecialCharacters(state.getLine().getContent().get(1).getText());
         } catch (Exception e) {
             return "";
         }

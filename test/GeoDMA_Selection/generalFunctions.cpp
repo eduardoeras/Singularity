@@ -1,5 +1,40 @@
+/*  Copyright (C) 2012 National Institute For Space Research (INPE) - Brazil.
+
+This file is part of the GeoDMA - a Toolbox that integrates Data Mining Techniques with object-based
+and multi-temporal analysis of satellite remotely sensed imagery.
+
+GeoDMA is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License,
+or (at your option) any later version.
+
+GeoDMA is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with GeoDMA. See COPYING. If not, write to
+GeoDMA Team at <thales@dpi.inpe.br, raian@dpi.inpe.br, castejon@dpi.inpe.br>.
+*/
+
+// #include <terralib/dataaccess.h>
+// #include <terralib/memory.h>
+// #include <terralib/rp.h>
+// #include <terralib/datatype.h>
+// #include <terralib/sam/rtree.h>
+// #include <terralib/common.h>
+//
+// #include <boost/filesystem.hpp>
+//
 #include <string>
+// #include <memory>
 #include <vector>
+// #include <map>
+// #include <fstream>
+// #include <limits>
+// #include <algorithm>
+// #include <set>
 
 // GeoDMA Includes
 #include "generalFunctions.hpp"

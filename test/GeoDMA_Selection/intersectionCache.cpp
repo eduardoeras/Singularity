@@ -1,25 +1,56 @@
+/*  Copyright (C) 2012 National Institute For Space Research (INPE) - Brazil.
+
+This file is part of the GeoDMA - a Toolbox that integrates Data Mining Techniques with object-based
+and multi-temporal analysis of satellite remotely sensed imagery.
+
+GeoDMA is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License,
+or (at your option) any later version.
+
+GeoDMA is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with GeoDMA. See COPYING. If not, write to
+GeoDMA Team at <thales@dpi.inpe.br, raian@dpi.inpe.br, castejon@dpi.inpe.br>.
+*/
+
+/*!
+  \file gdma/lib/featureextraction/intersectionCache.cpp
+
+  \brief Class to store intersections between two layers, to make it faster to search.
+
+  \author Raian Vargas Maretto
+  \author Thales Sehn Korting
+  \author Emiliano Ferreira Castejon
+*/
+
 // Boost Includes
 #include <boost/numeric/ublas/matrix_sparse.hpp>
+
 // TerraLib includes
 #include <terralib/common/progress/TaskProgress.h>
 #include <terralib/core/translator/Translator.h>
 #include <terralib/sam/rtree/Index.h>  // R-tree
+
 // STL Includes
 #include <map>
 #include <memory>
 #include <set>
 #include <string>
 #include <vector>
+
 // GeoDMA Includes
 #include "geodmalib/common/messageMediator.hpp"
 #include "geodmalib/featureextraction/intersectionCache.hpp"
 
-gdma::fte::IntersectionCache::IntersectionCache(
-    const std::vector<te::gm::Geometry*> &layer1,
+gdma::fte::IntersectionCache::IntersectionCache(const std::vector<te::gm::Geometry*> &layer1,
     const boost::bimap<std::string, std::size_t> &layer1IDs,
     const std::vector<te::gm::Geometry*> &layer2,
-    const boost::bimap<std::string, std::size_t> &layer2IDs)
-{
+    const boost::bimap<std::string, std::size_t> &layer2IDs) {
     te::common::TaskProgress task(TE_TR("Coumputing intersections"));
     task.setTotalSteps((layer1.size() + layer2.size()));
     task.useTimer(true);
