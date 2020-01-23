@@ -1,5 +1,6 @@
 package generator.elements;
 
+import global.structure.Element;
 import global.structure.Event;
 import global.structure.State;
 import global.structure.Transition;
@@ -25,6 +26,9 @@ public class Variables {
             if (state.getId() != -1 && activeStates.contains(state)) {
                 output = output.concat("            " + state.getLabel() + "_" + state.getId() + ",\n");
                 statistics.addState();
+                if (state.getElement().equals(Element.DECISION) || state.getElement().equals(Element.LOOP)) {
+                    statistics.addDecision();
+                }
             }
         }
         output = output.substring(0, output.length() - 2) + "\n";
@@ -58,7 +62,6 @@ public class Variables {
     public boolean existsBoolean (List<Transition> transitions) {
         for (Transition transition : transitions) {
             if (transition.getEvent().getEvent().equals("TRUE") || transition.getEvent().getEvent().equals("FALSE")) {
-                statistics.setDecision();
                 return true;
             }
         }

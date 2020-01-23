@@ -47,22 +47,29 @@ public class Constructor {
 
     private void print (List<List<Step>> counterexamples) {
         String output = "";
-        String header = "";
 
         int validCounterexampleCounter = 0;
         int invalidCounterexampleCounter = 0;
-        int bigger = 0;
+        boolean first = true;
+
         for (List<Step> counterexample : counterexamples) {
             if (counterexample.size() < 3) {
                 invalidCounterexampleCounter ++;
                 continue;
             }
-            if (counterexample.size() > bigger) {
-                bigger = counterexample.size();
+            if (first) {
+                statistics.setSmallestCounterexample(counterexample.size());
+                first = false;
+            }
+            if (counterexample.size() > statistics.getBiggestCounterexample()) {
+                statistics.setBiggestCounterexample(counterexample.size());
+            }
+            if (counterexample.size() < statistics.getSmallestCounterexample()) {
+                statistics.setSmallestCounterexample(counterexample.size());
             }
             int line = 1;
             validCounterexampleCounter ++;
-            output = output.concat("----------------------\n");
+            output = output.concat("---------------------- " + validCounterexampleCounter + "\n");
             for (Step step : counterexample) {
                 output = output.concat(line + "\n");
                 line ++;
@@ -78,27 +85,7 @@ public class Constructor {
         statistics.setValidCounterexamples(validCounterexampleCounter);
         statistics.setInvalidCounterexamples(invalidCounterexampleCounter);
 
-        header = header.concat("Name of the input C++ file: " + fileName.getFileName() + "\n");
-        header = header.concat("Number of states: " + statistics.getStates() + "\n");
-        header = header.concat("Number of events: " + statistics.getEvents() + "\n");
-        if (statistics.getDecision()) {
-            header = header.concat("Is there decisions? Yes\n");
-        } else {
-            header = header.concat("Is there decisions? No\n");
-        }
-        header = header.concat("Number of transitions: " + statistics.getTransitions() + "\n");
-        header = header.concat("..................................\n");
-        header = header.concat("Number of Case One properties: " + statistics.getPropertiesCaseOne() + "\n");
-        header = header.concat("Number of Case Two properties: " + statistics.getPropertiesCaseTwo() + "\n");
-        header = header.concat("Number of Case Three properties: " + statistics.getPropertiesCaseThree() + "\n");
-        header = header.concat("Total Number of properties: " + statistics.getProperties() + "\n");
-        header = header.concat("..................................\n");
-        header = header.concat("Number of Counterexamples: " + statistics.getTotalCounterexamples() + "\n");
-        header = header.concat("Number of Valid Counterexamples: " + statistics.getValidCounterexamples() + "\n");
-        header = header.concat("Number of Invalid Counterexamples: " + statistics.getInvalidCounterexamples() + "\n");
-        header = header.concat("Bigger number of states in a counterexample: " + bigger + "\n");
-
-        System.out.println(header);
+        output = statistics.print().concat("\n" + output);
 
         try {
             PrintWriter printWriter = new PrintWriter(fileName.getFileName() + ".counterexample");
