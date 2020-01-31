@@ -5,9 +5,11 @@ public class Statistics {
     private static Statistics uniqueInstance;
     private FileName fileName;
     private int states;
-    private int transitions;
+    private int eventTransitions;
+    private int stateTransitions;
     private int events;
     private int decisions;
+    private int components;
     private int properties;
     private int propertiesCaseOne;
     private int propertiesCaseTwo;
@@ -40,12 +42,24 @@ public class Statistics {
         states ++;
     }
 
-    public int getTransitions() {
-        return transitions;
+    public int getEventTransitions() {
+        return eventTransitions;
     }
 
-    public void addTransition() {
-        transitions ++;
+    public void addEventTransition() {
+        eventTransitions ++;
+    }
+
+    public int getStateTransitions() {
+        return stateTransitions;
+    }
+
+    public void addStateTransition() {
+        stateTransitions ++;
+    }
+
+    public int getTotalTransitions() {
+        return eventTransitions + stateTransitions;
     }
 
     public int getEvents() {
@@ -62,6 +76,14 @@ public class Statistics {
 
     public void addDecision() {
         decisions++;
+    }
+
+    public int getComponents () {
+        return components;
+    }
+
+    public void addComponent () {
+        components ++;
     }
 
     public int getProperties() {
@@ -136,6 +158,10 @@ public class Statistics {
         this.smallestCounterexample = smallestCounterexample;
     }
 
+    public int getComplexity () {
+        return stateTransitions - states + 2 * components;
+    }
+
     public String print () {
         String header = "";
 
@@ -143,7 +169,12 @@ public class Statistics {
         header = header.concat("Number of states: " + states + "\n");
         header = header.concat("Number of events: " + events + "\n");
         header = header.concat("Number of decisions: " + decisions + "\n");
-        header = header.concat("Number of transitions: " + transitions + "\n");
+        header = header.concat("Number of state transitions: " + stateTransitions + "\n");
+        header = header.concat("Number of event transitions: " + eventTransitions + "\n");
+        header = header.concat("Number of total transitions: " + getTotalTransitions()+ "\n");
+        header = header.concat("Number of components: " + components + "\n");
+        header = header.concat("..................................\n");
+        header = header.concat("Cyclomatic Complexity: " + getComplexity() + "\n");
         header = header.concat("..................................\n");
         header = header.concat("Number of Case One properties: " + propertiesCaseOne + "\n");
         header = header.concat("Number of Case Two properties: " + propertiesCaseTwo + "\n");
@@ -159,11 +190,33 @@ public class Statistics {
         return header;
     }
 
+    public String getData () {
+        String data = "";
+        data = data + states + "; ";
+        data = data + eventTransitions + "; ";
+        data = data + stateTransitions + "; ";
+        data = data + events + "; ";
+        data = data + decisions + "; ";
+        data = data + components + "; ";
+        data = data + properties + "; ";
+        data = data + propertiesCaseOne + "; ";
+        data = data + propertiesCaseTwo + "; ";
+        data = data + propertiesCaseThree + "; ";
+        data = data + totalCounterexamples + "; ";
+        data = data + validCounterexamples + "; ";
+        data = data + invalidCounterexamples + "; ";
+        data = data + biggestCounterexample + "; ";
+        data = data + smallestCounterexample + "\n";
+        return data;
+    }
+
     public void reset() {
         states = 0;
-        transitions = 0;
+        eventTransitions = 0;
+        stateTransitions = 0;
         events = 0;
         decisions = 0;
+        components = 0;
         properties = 0;
         propertiesCaseOne = 0;
         propertiesCaseTwo = 0;

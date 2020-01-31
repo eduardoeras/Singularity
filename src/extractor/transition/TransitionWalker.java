@@ -1,6 +1,7 @@
 package extractor.transition;
 
 import global.structure.*;
+import global.tools.Statistics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ public class TransitionWalker {
     private List<State> functions;
     private TransitionTools tools;
     private Transition last;
+    private Statistics statistics;
 
     //Constructor
     public TransitionWalker () {
@@ -18,6 +20,7 @@ public class TransitionWalker {
         functions = new ArrayList<>();
         tools = new TransitionTools();
         last = tools.createInitialState();
+        statistics = Statistics.getInstance();
     }
 
     //Public Methods
@@ -37,6 +40,7 @@ public class TransitionWalker {
                 case OPERATOR:
                     if (state.getVisibility() != Visibility.PRIVATE) {
                         main.add(state);
+                        statistics.addComponent();
                     }
                     break;
             }

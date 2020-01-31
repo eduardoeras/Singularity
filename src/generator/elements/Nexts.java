@@ -29,12 +29,12 @@ public class Nexts {
                     case LOOP:
                         if (event.equals("TRUE") || event.equals("FALSE")) {
                             output = output.concat("                (state = " + from + " & decision = " + event + ") : " + to + ";\n");
-                            statistics.addTransition();
+                            statistics.addStateTransition();
                         }
                         break;
                     default:
                         output = output.concat("                (state = " + from + ") : " + to + ";\n");
-                        statistics.addTransition();
+                        statistics.addStateTransition();
                 }
             }
         }
@@ -69,7 +69,7 @@ public class Nexts {
         }
         for (String line : lines) {
             output = output.concat(line);
-            statistics.addTransition();
+            statistics.addEventTransition();
         }
         return output;
     }
@@ -102,7 +102,7 @@ public class Nexts {
         }
         for (String line : lines) {
             output = output.concat(line);
-            statistics.addTransition();
+            statistics.addEventTransition();
         }
         return output;
     }

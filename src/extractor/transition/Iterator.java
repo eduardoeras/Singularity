@@ -2,6 +2,7 @@ package extractor.transition;
 
 import global.structure.State;
 import global.structure.Transition;
+import global.tools.Statistics;
 import global.tools.StringTools;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -11,6 +12,7 @@ import java.util.List;
 public class Iterator {
     //Attributes
     private StringTools stringTools;
+    private Statistics statistics;
     private TransitionTools tools;
     private TryStorage tryStorage;
     private BreakControl breakControl;
@@ -24,6 +26,7 @@ public class Iterator {
     //Constructor
     public Iterator (State state, int scopeLevel) {
         stringTools = new StringTools();
+        statistics = Statistics.getInstance();
         tools = new TransitionTools();
         tryStorage = TryStorage.getInstance();
         breakControl = BreakControl.getInstance();
@@ -155,10 +158,12 @@ public class Iterator {
                     List<Transition> innerResponse = new ArrayList<>();
                     while (imInside(me)) {
                         while (state.getLabel().equals("case")) {
+                            statistics.addStateTransition();
                             innerResponse.add(tools.createTransition(extractReturnEvent(state), me, null));
                             state = tools.getNextState(state, states);
                         }
                         if (state.getLabel().equals("default")) {
+                            //statistics.addStateTransition();
                             innerResponse.add(tools.createTransition("lambda", me, null));
                             state = tools.getNextState(state, states);
                         } else {

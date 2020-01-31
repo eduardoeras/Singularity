@@ -4,9 +4,7 @@ import global.structure.State;
 import global.tools.FileName;
 import global.tools.Statistics;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,6 +84,14 @@ public class Constructor {
         statistics.setInvalidCounterexamples(invalidCounterexampleCounter);
 
         output = statistics.print().concat("\n" + output);
+
+        try {
+            FileWriter writer = new FileWriter("statistics.txt", true);
+            writer.write(statistics.getData());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             PrintWriter printWriter = new PrintWriter(fileName.getFileName() + ".counterexample");
