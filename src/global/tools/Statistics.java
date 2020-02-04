@@ -19,6 +19,8 @@ public class Statistics {
     private int invalidCounterexamples;
     private int biggestCounterexample;
     private int smallestCounterexample;
+    private int usedStates;
+    private int usedtransitions;
 
     //Constructor
     private Statistics () {
@@ -162,6 +164,14 @@ public class Statistics {
         return stateTransitions - states + 2 * components;
     }
 
+    public void setUsedStates (int usedStates) {
+        this.usedStates = usedStates;
+    }
+
+    public void setUsedtransitions (int usedtransitions) {
+        this.usedtransitions = usedtransitions;
+    }
+
     public String print () {
         String header = "";
 
@@ -171,7 +181,7 @@ public class Statistics {
         header = header.concat("Number of decisions: " + decisions + "\n");
         header = header.concat("Number of state transitions: " + stateTransitions + "\n");
         header = header.concat("Number of event transitions: " + eventTransitions + "\n");
-        header = header.concat("Number of total transitions: " + getTotalTransitions()+ "\n");
+        header = header.concat("Number of total transitions: " + getTotalTransitions() + "\n");
         header = header.concat("Number of components: " + components + "\n");
         header = header.concat("..................................\n");
         header = header.concat("Cyclomatic Complexity: " + getComplexity() + "\n");
@@ -186,27 +196,34 @@ public class Statistics {
         header = header.concat("Number of Invalid Counterexamples: " + invalidCounterexamples + "\n");
         header = header.concat("Biggest number of states in a counterexample: " + biggestCounterexample + "\n");
         header = header.concat("Smallest number of states in a counterexample: " + smallestCounterexample + "\n");
+        header = header.concat("Number of states used by valid counterexamples: " + usedStates + "\n");
+        header = header.concat("Number of transitions used by valid counterexamples: " + usedtransitions + "\n");
 
         return header;
     }
 
     public String getData () {
+        String separator = " ";
         String data = "";
-        data = data + states + "; ";
-        data = data + eventTransitions + "; ";
-        data = data + stateTransitions + "; ";
-        data = data + events + "; ";
-        data = data + decisions + "; ";
-        data = data + components + "; ";
-        data = data + properties + "; ";
-        data = data + propertiesCaseOne + "; ";
-        data = data + propertiesCaseTwo + "; ";
-        data = data + propertiesCaseThree + "; ";
-        data = data + totalCounterexamples + "; ";
-        data = data + validCounterexamples + "; ";
-        data = data + invalidCounterexamples + "; ";
-        data = data + biggestCounterexample + "; ";
-        data = data + smallestCounterexample + "\n";
+        data = data + states + separator; //1
+        data = data + events + separator; //2
+        data = data + decisions + separator; //3
+        data = data + stateTransitions + separator; //4
+        data = data + eventTransitions + separator; //5
+        data = data + getTotalTransitions() + separator; //6
+        data = data + usedStates + separator; //17
+        data = data + usedtransitions + separator; //18
+        data = data + components + separator; //7
+        data = data + getComplexity() + separator; //8
+        data = data + properties + separator; //9
+        data = data + propertiesCaseOne + separator; //10
+        data = data + propertiesCaseTwo + separator; //11
+        data = data + propertiesCaseThree + separator; //12
+        data = data + totalCounterexamples + separator; //13
+        data = data + validCounterexamples + separator; //14
+        data = data + invalidCounterexamples + separator; //15
+        data = data + biggestCounterexample + separator; //16
+        data = data + smallestCounterexample + "\n "; //17
         return data;
     }
 
@@ -226,5 +243,7 @@ public class Statistics {
         invalidCounterexamples = 0;
         biggestCounterexample = 0;
         smallestCounterexample = 0;
+        usedStates = 0;
+        usedtransitions = 0;
     }
 }

@@ -1,6 +1,8 @@
 package constructor;
 
+import global.structure.Event;
 import global.structure.State;
+import global.structure.Transition;
 import global.tools.FileName;
 import global.tools.Statistics;
 
@@ -22,7 +24,7 @@ public class Constructor {
         statistics = Statistics.getInstance();
     }
 
-    //Methods
+    //Public Methods
     public void build(List<State> states) {
         List<String> output = new ArrayList<>();
         try {
@@ -43,12 +45,18 @@ public class Constructor {
         print(filter.process(output, states));
     }
 
+    //Private Methods
     private void print (List<List<Step>> counterexamples) {
         String output = "";
 
         int validCounterexampleCounter = 0;
         int invalidCounterexampleCounter = 0;
         boolean first = true;
+
+        IdTransition transition = new IdTransition();
+
+        List<IdTransition> transitions = new ArrayList<>();
+        List<Integer> usedStates = new ArrayList<>();
 
         for (List<Step> counterexample : counterexamples) {
             if (counterexample.size() < 3) {
@@ -65,23 +73,39 @@ public class Constructor {
             if (counterexample.size() < statistics.getSmallestCounterexample()) {
                 statistics.setSmallestCounterexample(counterexample.size());
             }
+
             int line = 1;
             validCounterexampleCounter ++;
             output = output.concat("---------------------- " + validCounterexampleCounter + "\n");
             for (Step step : counterexample) {
                 output = output.concat(line + "\n");
                 line ++;
-                if (step.getState() != null)
+                if (step.getState() != null) {
                     output = output.concat("STATE = " + step.getState().getLabel() + "\n");
-                if (step.getEvent() != null)
+                    if (transition.getTo() == null) {
+                        transition.setTo(step.getState().getId());
+                    } else {
+                        transition.setFrom(transition.getTo());
+                        transition.setTo(step.getState().getId());
+                        addIfNew(transition, transitions);
+                    }
+                    if (!usedStates.contains(step.getState().getId())) {
+                        usedStates.add(step.getState().getId());
+                    }
+                }
+                if (step.getEvent() != null) {
                     output = output.concat("EVENT = " + step.getEvent() + "\n");
+                }
                 output = output.concat("DECISION = " + step.getDecision() + "\n");
             }
+            transition = new IdTransition();
         }
 
         statistics.setTotalCounterexamples(validCounterexampleCounter + invalidCounterexampleCounter);
         statistics.setValidCounterexamples(validCounterexampleCounter);
         statistics.setInvalidCounterexamples(invalidCounterexampleCounter);
+        statistics.setUsedStates(usedStates.size());
+        statistics.setUsedtransitions(transitions.size());
 
         output = statistics.print().concat("\n" + output);
 
@@ -101,5 +125,19 @@ public class Constructor {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private void addIfNew (IdTransition transition, List<IdTransition> transitions) {
+        if (!isThere(transition, transitions)) {
+            transitions.add(transition.getClone());
+        }
+    }
+
+    private boolean isThere (IdTransition transition, List<IdTransition> transitions) {
+        for (IdTransition stored : transitions) {
+            if (stored.getFrom().equals(transition.getFrom()) && stored.getTo().equals(transition.getTo())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

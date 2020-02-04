@@ -16,7 +16,7 @@ public class SingularityTest {
     }
 
     //Methods
-    //@Test
+    @Test
     public void controlTests() {
         System.out.println("\n          MINIMAL\n");
         singularity.run("test/data/minimal.cpp", false);
@@ -26,7 +26,7 @@ public class SingularityTest {
         singularity.run("test/data/triangle.cpp", false);
     }
 
-    //@Test
+    @Test
     public void McCabe() {
         System.out.println("\n          CASE 01\n");
         singularity.run("test/McCabe/case01.cpp", false);
@@ -110,13 +110,13 @@ public class SingularityTest {
 
     //@Test
     public void terraLibSelection() throws InterruptedException {
-        for (int i = 1; i <= 1063; i++) { //Original number: 1466
+        for (int i = 1000; i <= 1063; i++) { //Original number: 1466
             System.out.println(i);
             try {
                 singularity.run("test/terralib_Selection/" + i + ".cpp", false);
             } catch (Exception e) {
                 System.out.println("FAIL: " + i);
-                String command;
+                /*String command;
                 try {
                     command = "rm test/terralib_Selection/" + i + ".cpp";
                     Process process;
@@ -127,9 +127,10 @@ public class SingularityTest {
                     process.waitFor();
                 } catch (Exception w) {
                     w.printStackTrace();
-                }
+                }*/
             }
-            //TimeUnit.SECONDS.sleep(1);
+            //System.gc();
+            //TimeUnit.SECONDS.sleep(5);
         }
     }
 
